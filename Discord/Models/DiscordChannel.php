@@ -174,8 +174,83 @@ class ThreadMember extends DiscordObjectParser
     public int $flags;
 }
 
+class ModifyDiscordChannel
+{
+    /**
+     * 1-100 character channel name
+     */
+    public string $name;
+
+    /**
+     * 	the type of channel; only conversion between text and news is supported and only in guilds with the "NEWS" feature
+     */
+    public int $type;
+
+    /**
+     * the position of the channel in the left-hand listing
+     */
+    public ?int $position;
+
+    /**
+     * 0-1024 character channel topic
+     */
+    public ?string $topic;
+
+    /**
+     * whether the channel is nsfw
+     */
+    public ?bool $nsfw;
+
+    /**
+     * amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected
+     */
+    public ?int $rate_limit_per_user;
+
+    /**
+     * the bitrate (in bits) of the voice channel; 8000 to 96000 (128000 for VIP servers)
+     */
+    public ?int $bitrate;
+
+    /**
+     * the user limit of the voice channel; 0 refers to no limit, 1 to 99 refers to a user limit
+     */
+    public ?int $user_limit;
+
+    /**
+     * channel or category-specific permissions
+     */
+    public ?array $permission_overwrites;
+
+    /**
+     * 	id of the new parent category for a channel
+     */
+    public ?string $parent_id;
+
+    /**
+     * channel voice region id, automatic when set to null
+     */
+    public ?string $rtc_region;
+
+    /**
+     * the camera video quality mode of the voice channel
+     */
+    public ?int $video_quality_mode;
+
+    /**
+     * the default duration for newly created threads in the channel, in minutes, to automatically archive the thread after recent activity
+     */
+    public ?int $default_auto_archive_duration;
+}
+
 class DiscordChannel extends DiscordObjectParser
 {
+    public function __construct(array $properties = array())
+    {
+        parent::__construct($properties);
+        $this->thread_metadata = new ThreadMetadata($this->thread_metadata);
+        $this->member = new ThreadMember($this->member);
+    }
+
     /**
      * the id of this channel
      */
@@ -288,13 +363,11 @@ class DiscordChannel extends DiscordObjectParser
 
     /**
      * thread-specific fields not needed by other channels.
-     * YOU HAVE TO INSTANTIATE ThreadMetadata
      */
     public $thread_metadata = null;
 
     /**
      * 	thread member object for the current user, if they have joined the thread, only included on certain API endpoints.
-     *  YOU HAVE TO INSTANTIATE ThreadMember
      */
     public $member = null;
 

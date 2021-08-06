@@ -1,8 +1,6 @@
 <?php
 namespace Nexd\Discord;
 
-use Nexd\Discord\DiscordModify;
-
 class VerificationLevel
 {
 	/**

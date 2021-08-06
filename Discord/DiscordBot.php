@@ -7,8 +7,12 @@ use Nexd\Discord\DiscordGuildMember;
 use Nexd\Discord\DiscordGuildPreview;
 use Nexd\Discord\DiscordUser;
 use Nexd\Discord\DiscordChannel;
+use Nexd\Discord\DiscordMessage;
 
 use Nexd\Discord\ModifyDiscordGuild;
+use Nexd\Discord\ModifyDiscordGuildMember;
+use Nexd\Discord\ModifyDiscordChannel;
+use Nexd\Discord\ModifyDiscordMessage;
 
 use Nexd\Discord\Exceptions\DiscordInvalidResponseException;
 
@@ -17,7 +21,9 @@ class DiscordBot
     public function __construct(public ?string $token) { }
 
     /**
-     * Returns the guild object for the given id. If with_counts is set to true, this endpoint will also return approximate_member_count and approximate_presence_count for the guild.
+     * Returns the guild object for the given id.
+     * If with_counts is set to true, this endpoint will also return approximate_member_count and approximate_presence_count for the guild.
+     * @return DiscordGuild object on success.
      */
     public function GetGuild(string $id) : DiscordGuild
     {
@@ -25,7 +31,9 @@ class DiscordBot
     }
 
     /**
-     * Returns the guild preview object for the given id. If the user is not in the guild, then the guild must be lurkable (it must be Discoverable or have a live public stage).
+     * Returns the guild preview object for the given id.
+     * If the user is not in the guild, then the guild must be lurkable (it must be Discoverable or have a live public stage).
+     * @return DiscordGuildPreview object on success.
      */
     public function GetGuildPreview(string $id) : DiscordGuildPreview
     {
@@ -33,7 +41,11 @@ class DiscordBot
     }
 
     /**
-     * Modify a guild's settings. Requires the MANAGE_GUILD permission. Returns the updated guild object on success. Fires a Guild Update Gateway event.
+     * Modify a guild's settings.
+     * Requires the MANAGE_GUILD permission.
+     * Returns the updated guild.
+     * Fires a Guild Update Gateway event.
+     * @return DiscordGuild on success.
      */
     public function ModifyGuild(string $id, ModifyDiscordGuild $modify) : DiscordGuild
     {
@@ -41,15 +53,19 @@ class DiscordBot
     }
 
     /**
-     * Delete a guild permanently. User must be owner. Returns 204 No Content on success. Fires a Guild Delete Gateway event.
+     * Delete a guild permanently.
+     * User must be owner.
+     * Returns 204 No Content on success.
+     * Fires a Guild Delete Gateway event.
      */
-    public function DeleteGuild(string $id)
+    public function DeleteGuild(string $id) : void
     {
         $this->SendRequest("guilds/$id", DiscordRequest::HTTPRequestMethod_DELETE);
     }
 
     /**
-     * Returns a list of guild channel objects. Does not include threads.
+     * Does not include threads.
+     * @return array of guild DiscordChannel objects.
      */
     public function GetGuildChannels(string $id) : array
     {
@@ -63,7 +79,8 @@ class DiscordBot
     }
 
     /**
-     * Returns all active threads in the guild, including public and private threads. Threads are ordered by their id, in descending order.
+     * Returns all active threads in the guild, including public and private threads.
+     * Threads are ordered by their id, in descending order.
      */
     public function GetActiveThreads(string $id): array
     {
@@ -111,7 +128,10 @@ class DiscordBot
     }
 
     /**
-     * Modify attributes of a guild member. Returns a 200 OK with the guild member as the body. Fires a Guild Member Update Gateway event. If the channel_id is set to null, this will force the target user to be disconnected from voice.
+     * Modify attributes of a guild member.
+     * Returns a 200 OK with the guild member as the body.
+     * Fires a Guild Member Update Gateway event.
+     * If the channel_id is set to null, this will force the target user to be disconnected from voice.
      */
     public function ModifyGuildMember(string $guild_id, string $user_id, ModifyDiscordGuildMember $modify) : DiscordGuildMember
     {
@@ -119,8 +139,10 @@ class DiscordBot
     }
 
     /**
-     * Modifies the nickname of the current user in a guild. Returns a 200 with the nickname on success. Fires a Guild Member Update Gateway event.
-     * @param ?string $nick 	value to set users nickname to, requires CHANGE_NICKNAME permission
+     * Modifies the nickname of the current user in a guild.
+     * Returns a 200 with the nickname on success.
+     * Fires a Guild Member Update Gateway event.
+     * @param ?string $nick value to set users nickname to, requires CHANGE_NICKNAME permission
      */
     public function ModifyCurrentUserNick(string $id, ?string $nick) : string
     {
@@ -128,7 +150,10 @@ class DiscordBot
     }
 
     /**
-     * Adds a role to a guild member. Requires the MANAGE_ROLES permission. Returns a 204 empty response on success. Fires a Guild Member Update Gateway event.
+     * Adds a role to a guild member.
+     * Requires the MANAGE_ROLES permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Member Update Gateway event.
      */
     public function AddMemberRole(string $guild_id, string $user_id, string $role_id) : void
     {
@@ -136,7 +161,9 @@ class DiscordBot
     }
 
     /**
-     * Removes a role from a guild member. Requires the MANAGE_ROLES permission. Returns a 204 empty response on success. Fires a Guild Member Update Gateway event.
+     * Removes a role from a guild member. Requires the MANAGE_ROLES permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Member Update Gateway event.
      */
     public function RemoveMemberRole(string $guild_id, string $user_id, string $role_id) : void
     {
@@ -144,7 +171,9 @@ class DiscordBot
     }
 
     /**
-     * Remove a member from a guild. Requires KICK_MEMBERS permission. Returns a 204 empty response on success. Fires a Guild Member Remove Gateway event.
+     * Remove a member from a guild. Requires KICK_MEMBERS permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Member Remove Gateway event.
      */
     public function KickMember(string $guild_id, string $user_id) : void
     {
@@ -152,7 +181,9 @@ class DiscordBot
     }
 
     /**
-     * Create a guild ban, and optionally delete previous messages sent by the banned user. Requires the BAN_MEMBERS permission. Returns a 204 empty response on success. Fires a Guild Ban Add Gateway event.
+     * Create a guild ban, and optionally delete previous messages sent by the banned user.
+     * Requires the BAN_MEMBERS permission. Returns a 204 empty response on success.
+     * Fires a Guild Ban Add Gateway event.
      */
     public function BanMember(string $guild_id, string $user_id, string $reason, int $deleteMessages) : void
     {
@@ -252,13 +283,14 @@ class DiscordBot
     /**
      * Leave a guild. Returns a 204 empty response on success.
      */
-    public function LeaveGuild(string $id)
+    public function LeaveGuild(string $id) : void
     {
         $this->SendRequest("users/@me/guilds/$id", DiscordRequest::HTTPRequestMethod_DELETE);
     }
 
     /**
-     * Create a new DM channel with a user. Returns a DM channel object.
+     * Create a new DM channel with a user.
+     * @return DiscordChannel DM channel object.
      * @param string $id the recipient to open a DM channel with
      */
     public function CreateDM(string $id) : DiscordChannel
@@ -267,7 +299,9 @@ class DiscordBot
     }
 
     /**
-     * Create a new group DM channel with multiple users. Returns a DM channel object. This endpoint was intended to be used with the now-deprecated GameBridge SDK. DMs created with this endpoint will not be shown in the Discord client
+     * Create a new group DM channel with multiple users. Returns a DM channel object.
+     * This endpoint was intended to be used with the now-deprecated GameBridge SDK.
+     * DMs created with this endpoint will not be shown in the Discord client
      * @param array $access_tokens access tokens of users that have granted your app the gdm.join scope
      * @param array $nicks 	a dictionary of user ids to their respective nicknames
      */
@@ -285,7 +319,9 @@ class DiscordBot
     }
 
     /**
-     * Get a channel by ID. Returns a channel object. If the channel is a thread, a thread member object is included in the returned result.
+     * Get a channel by ID.
+     * @return DiscordChannel object.
+     * If the channel is a thread, a thread member object is included in the returned result.
      */
     public function GetChannel(string $id) : DiscordChannel
     {
@@ -293,10 +329,128 @@ class DiscordBot
     }
 
     /**
+     * Update a channel's settings.
+     * Returns a channel on success, and a 400 BAD REQUEST on invalid parameters.
+     * All JSON parameters are optional.
+     * @param string $id DM channel id that you want to modify.
+     * @param string $name New name for the channel.
+     * @param string $icon New base64 encoded icon.
+     */
+    public function ModifyDMChannel(string $id, string $name, string $icon = null) : DiscordChannel
+    {
+        $json = [ "name" => $name ];
+        if(isset($icon))
+            $json["icon"] = $icon;
+
+        return new DiscordChannel($this->SendRequest("channels/$id", DiscordRequest::HTTPRequestMethod_PATCH, $json));
+    }
+
+    /**
+     * Update a channel's settings.
+     * All JSON parameters are optional.
+     * @return DiscordChannel object on success, and a 400 BAD REQUEST on invalid parameters.
+     */
+    public function ModifyChannel(string $id, ModifyDiscordChannel $modify) : DiscordChannel
+    {
+        return new DiscordChannel($this->SendRequest("channels/$id", DiscordRequest::HTTPRequestMethod_PATCH, $modify));
+    }
+
+    /**
+     * Delete a channel, or close a private message.
+     * Requires the MANAGE_CHANNELS permission for the guild, or MANAGE_THREADS if the channel is a thread.
+     * Deleting a category does not delete its child channels; they will have their parent_id removed and a Channel Update Gateway event will fire for each of them.
+     * @return DiscordChannel object on success. Fires a Channel Delete Gateway event (or Thread Delete if the channel was a thread).
+     */
+    public function DeleteChannel(string $id) : DiscordChannel
+    {
+        return new DiscordChannel($this->SendRequest("channels/$id", DiscordRequest::HTTPRequestMethod_DELETE));
+    }
+
+    /**
+     * Returns the messages for a channel.
+     * If operating on a guild channel, this endpoint requires the VIEW_CHANNEL permission to be present on the current user.
+     * If the current user is missing the 'READ_MESSAGE_HISTORY' permission in the channel then this will return no messages (since they cannot read the message history).
+     * @return array of DiscordMessage objects on success.
+     */
+    public function GetChannelMessages(string $id, int $limit = 50) : array
+    {
+        $result = $this->SendRequest("channels/$id/messages?limit=$limit", DiscordRequest::HTTPRequestMethod_GET);
+        foreach($result as $index => $value)
+        {
+            $result[$index] = new DiscordMessage($value);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns a specific message in the channel.
+     * If operating on a guild channel, this endpoint requires the 'READ_MESSAGE_HISTORY' permission to be present on the current user.
+     * @return DiscordMessage object on success.
+     */
+    public function GetChannelMessage(string $channel_id, string $message_id) : DiscordMessage
+    {
+        return new DiscordMessage($this->SendRequest("channels/$channel_id/messages/$message_id", DiscordRequest::HTTPRequestMethod_GET));
+    }
+
+    /**
+     * Post a message to a guild text or DM channel.
+     * Returns a message object.
+     * Fires a Message Create Gateway event.
+     * See message formatting for more information on how to properly format messages.
+     * 
+     * For limitations, check: https://discord.com/developers/docs/resources/channel#create-message-limitations.
+     * 
+     * For parameters, check: https://discord.com/developers/docs/resources/channel#create-message-jsonform-params.
+     */
+    public function SendMessage(string $id, DiscordMessage $message) : DiscordMessage
+    {
+        return new DiscordMessage($this->SendRequest("channels/$id/messages", DiscordRequest::HTTPRequestMethod_POST, $message));
+    }
+
+    /**
+     * Edit a previously sent message.
+     * The fields content, embeds, and flags can be edited by the original message author.
+     * Other users can only edit flags and only if they have the MANAGE_MESSAGES permission in the corresponding channel.
+     * When specifying flags, ensure to include all previously set flags/bits in addition to ones that you are modifying.
+     * Only flags documented in the table below may be modified by users (unsupported flag changes are currently ignored without error).
+     * When the content field is edited, the mentions array in the message object will be reconstructed from scratch based on the new content. The allowed_mentions field of the edit request controls how this happens. If there is no explicit allowed_mentions in the edit request, the content will be parsed with default allowances, that is, without regard to whether or not an allowed_mentions was present in the request that originally created the message.
+     * @return DiscordMessage object. Fires a Message Update Gateway event.
+     */
+    public function EditMessage(string $channel_id, string $message_id, ModifyDiscordMessage $modify) : DiscordMessage
+    {
+        return new DiscordMessage($this->SendRequest("channels/$channel_id/messages/$message_id", DiscordRequest::HTTPRequestMethod_PATCH, $modify));
+    }
+
+    /**
+     * Delete a message.
+     * If operating on a guild channel and trying to delete a message that was not sent by the current user, this endpoint requires the MANAGE_MESSAGES permission.
+     * Returns a 204 empty response on success.
+     * Fires a Message Delete Gateway event.
+     */
+    public function DeleteMessage(string $channel_id, string $message_id) : void
+    {
+        $this->SendRequest("channels/$channel_id/messages/$message_id", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
+     * Delete multiple messages in a single request.
+     * This endpoint can only be used on guild channels and requires the MANAGE_MESSAGES permission.
+     * Returns a 204 empty response on success.
+     * Fires a Message Delete Bulk Gateway event.
+     * 
+     * @param array $messages_id Any message IDs given that do not exist or are invalid will count towards the minimum and maximum message count (currently 2 and 100 respectively).
+     */
+    public function BulkDeleteMessages(string $channel_id, array $messages_id) : void
+    {
+        $this->SendRequest("channels/$channel_id/messages/bulk-delete", DiscordRequest::HTTPRequestMethod_POST, [ "messages" => $messages_id ]);
+    }
+
+    /**
      * Send request to the Discord API.
-     * @param string $route API route
-     * @param string $method HTTP Request method
-     * @param mixed $json Any value that will be passed as json body
+     * @param string $route API route.
+     * @param string $method HTTP Request method.
+     * @param mixed $json Any value that will be passed as json body.
      */
     private function SendRequest(string $route, string $method, mixed $json = null) : mixed
     {
