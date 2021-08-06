@@ -1,9 +1,6 @@
 <?php
 namespace Nexd\Discord;
 
-use Nexd\Discord\Exceptions\DiscordInvalidResponseException;
-use Nexd\Discord\Exceptions\DiscordOAuthCodeExpiredException;
-
 use Nexd\Discord\DiscordRequest;
 use Nexd\Discord\DiscordUser;
 
@@ -23,13 +20,7 @@ class DiscordOAuth
             "code" => $_GET['code']
         ));
 
-        try {
-            $this->access_token = $request->Send()["access_token"];
-        } catch (DiscordInvalidResponseException $exception)
-        {
-            if(strpos($exception->error_description, "Invalid \"code\""))
-                throw new DiscordOAuthCodeExpiredException("OAuth2 code expired");
-        }
+        $this->access_token = $request->Send()["access_token"];
     }
 
     /**
