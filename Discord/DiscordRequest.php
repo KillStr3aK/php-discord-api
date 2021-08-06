@@ -92,7 +92,7 @@ class DiscordRequest
 
     public function SetJsonBody(mixed $any) : void
     {
-        array_push($this->jsonBody, $any);
+        $this->jsonBody = json_decode(json_encode($any), true);
         $this->SetHeader("Content-Length: " . strlen(json_encode($any)));
     }
 
