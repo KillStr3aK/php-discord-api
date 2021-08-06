@@ -278,7 +278,7 @@ class DiscordChannel extends DiscordObjectParser
     /**
      * 	explicit permission overwrites for members and roles
      */
-    public array $permission_overwrites;
+    public ?array $permission_overwrites = null;
 
     /**
      * the name of the channel (1-100 characters)
