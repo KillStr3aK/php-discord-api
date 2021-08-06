@@ -247,8 +247,12 @@ class DiscordChannel extends DiscordObjectParser
     public function __construct(array $properties = array())
     {
         parent::__construct($properties);
-        $this->thread_metadata = new ThreadMetadata($this->thread_metadata);
-        $this->member = new ThreadMember($this->member);
+
+        if(isset($this->thread_metadata))
+            $this->thread_metadata = new ThreadMetadata($this->thread_metadata);
+           
+        if(isset($this->member))
+            $this->member = new ThreadMember($this->member);
     }
 
     /**
