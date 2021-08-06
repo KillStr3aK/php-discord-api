@@ -21,6 +21,14 @@ class DiscordRoleTags extends DiscordObjectParser
 
 class DiscordRole extends DiscordObjectParser
 {
+    public function __construct(array $properties = array())
+	{
+		parent::__construct($properties);
+		
+		if(isset($properties["tags"]))
+			$this->tags = new DiscordRoleTags($properties["tags"]);
+	}
+
     /**
      * role id
      */

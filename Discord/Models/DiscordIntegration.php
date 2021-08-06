@@ -23,6 +23,14 @@ class IntegrationAccount extends DiscordObjectParser
 
 class IntegrationApplication extends DiscordObjectParser
 {
+    public function __construct(array $properties = array())
+	{
+		parent::__construct($properties);
+		
+		if(isset($properties["bot"]))
+			$this->bot = new DiscordUser($properties["bot"]);
+	}
+
     /**
      * the id of the app
      */
@@ -56,6 +64,17 @@ class IntegrationApplication extends DiscordObjectParser
 
 class DiscordIntegration extends DiscordObjectParser
 {
+    public function __construct(array $properties = array())
+	{
+		parent::__construct($properties);
+		
+		if(isset($properties["user"]))
+			$this->user = new DiscordUser($properties["user"]);
+
+        if(isset($properties["account"]))
+			$this->account = new IntegrationAccount($properties["account"]);
+	}
+
     /**
      * integration id
      */

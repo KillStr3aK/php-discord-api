@@ -459,6 +459,14 @@ class DiscordGuildPreview extends DiscordObjectParser
 
 class DiscordGuildMember extends DiscordObjectParser
 {
+	public function __construct(array $properties = array())
+	{
+		parent::__construct($properties);
+		
+		if(isset($properties["user"]))
+			$this->user = new DiscordUser($properties["user"]);
+	}
+
 	/**
 	 * the user this guild member represents
 	 */
@@ -598,6 +606,14 @@ class DiscordGuildStickerFormat
 
 class DiscordGuildSticker extends DiscordObjectParser
 {
+	public function __construct(array $properties = array())
+	{
+		parent::__construct($properties);
+		
+		if(isset($properties["user"]))
+			$this->user = new DiscordUser($properties["user"]);
+	}
+	
 	/**
 	 * 	id of the sticker
 	 */

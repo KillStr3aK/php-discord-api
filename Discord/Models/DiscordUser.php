@@ -1,6 +1,7 @@
 <?php
 namespace Nexd\Discord;
 
+// Wrong?!
 class UserFlags
 {
     public const None = 0;
@@ -104,7 +105,16 @@ class DiscordConnection extends DiscordObjectParser
 
 class BanObject extends DiscordObjectParser
 {
+    public function __construct(array $properties = array())
+	{
+		parent::__construct($properties);
+		
+		if(isset($properties["user"]))
+			$this->user = new DiscordUser($properties["user"]);
+	}
+
     public ?string $reason;
+
     public $user;
 }
 
