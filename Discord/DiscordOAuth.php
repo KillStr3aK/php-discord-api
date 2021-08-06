@@ -61,7 +61,7 @@ class DiscordOAuth
      */
     public function GetGuilds() : array
     {
-        $result = array($this->SendRequest("users/@me/guilds", DiscordRequest::HTTPRequestMethod_GET));
+        $result = $this->SendRequest("users/@me/guilds", DiscordRequest::HTTPRequestMethod_GET);
         foreach($result as $index => $value)
         {
             $result[$index] = new DiscordGuild($value);
@@ -75,7 +75,7 @@ class DiscordOAuth
      */
     public function GetConnections() : array
     {
-        $result = array($this->SendRequest("users/@me/connections", DiscordRequest::HTTPRequestMethod_GET));
+        $result = $this->SendRequest("users/@me/connections", DiscordRequest::HTTPRequestMethod_GET);
         foreach($result as $index => $value)
         {
             $result[$index] = new DiscordConnection($value);
