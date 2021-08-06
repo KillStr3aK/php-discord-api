@@ -5,9 +5,10 @@ use Nexd\Discord\DiscordRequest;
 use Nexd\Discord\DiscordGuild;
 use Nexd\Discord\DiscordGuildMember;
 use Nexd\Discord\DiscordGuildPreview;
-use Nexd\Discord\ModifyDiscordGuild;
 use Nexd\Discord\DiscordUser;
 use Nexd\Discord\DiscordChannel;
+
+use Nexd\Discord\ModifyDiscordGuild;
 
 use Nexd\Discord\Exceptions\DiscordInvalidResponseException;
 
@@ -281,6 +282,14 @@ class DiscordBot
     public function GetCurrentUserConnections() : array
     {
         return $this->SendRequest("users/@me/connections", DiscordRequest::HTTPRequestMethod_GET);
+    }
+
+    /**
+     * Get a channel by ID. Returns a channel object. If the channel is a thread, a thread member object is included in the returned result.
+     */
+    public function GetChannel(string $id) : DiscordChannel
+    {
+        return new DiscordChannel($this->SendRequest("channels/$id", DiscordRequest::HTTPRequestMethod_GET));
     }
 
     /**

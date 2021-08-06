@@ -1,6 +1,8 @@
 <?php
 namespace Nexd\Discord;
 
+use Nexd\Discord\DiscordModify;
+
 class VerificationLevel
 {
 	/**
@@ -238,27 +240,72 @@ class ModifyDiscordGuildMember
 	/**
 	 * value to set users nickname to
 	 */
-	public string $nick;
+	public ?string $nick = null;
 
 	/**
 	 * array of role ids the member is assigned
 	 */
-	public array $roles;
+	public array $roles = [];
 
 	/**
 	 * whether the user is muted in voice channels. Will throw a 400 if the user is not in a voice channel
 	 */
-	public bool $mute;
+	public bool $mute = false;
 
 	/**
 	 * whether the user is deafened in voice channels. Will throw a 400 if the user is not in a voice channel
 	 */
-	public bool $deaf;
+	public bool $deaf = false;
 
 	/**
 	 * 	id of channel to move user to (if they are connected to voice)
 	 */
-	public string $channel_id;
+	public ?string $channel_id = null;
+
+	/**
+	 * value to set users nickname to
+	 */
+	public function SetNickname(string $nickname) : self
+	{
+		$this->nick = $nickname;
+		return $this;
+	}
+
+	/**
+	 * array of role ids the member is assigned
+	 */
+	public function SetRoles(array $roles) : self
+	{
+		$this->roles = $roles;
+		return $this;
+	}
+
+	/**
+	 * whether the user is muted in voice channels. Will throw a 400 if the user is not in a voice channel
+	 */
+	public function SetMute(bool $state) : self
+	{
+		$this->mute = $state;
+		return $this;
+	}
+
+	/**
+	 * whether the user is deafened in voice channels. Will throw a 400 if the user is not in a voice channel
+	 */
+	public function SetDeafen(bool $state) : self
+	{
+		$this->deaf = $state;
+		return $this;
+	}
+
+	/**
+	 * 	id of channel to move user to (if they are connected to voice)
+	 */
+	public function MoveToChannel(string $channelid) : self
+	{
+		$this->channel_id = $channelid;
+		return $this;
+	}
 }
 
 class ModifyDiscordGuild
@@ -632,27 +679,27 @@ class DiscordGuild extends DiscordObjectParser
     /**
      * icon hash
      */
-    public ?string $icon;
+    public ?string $icon = null;
 
     /**
      * icon hash, returned when in the template object
      */
-    public ?string $icon_splash;
+    public ?string $icon_splash = null;
 
     /**
      * splash hash
      */
-    public ?string $splash;
+    public ?string $splash = null;
 
     /**
      * discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
      */
-    public ?string $discovery_splash;
+    public ?string $discovery_splash = null;
 
 	/**
 	 * true if the user is the owner of the guild
 	 */
-	public bool $owner;
+	public ?bool $owner = false;
 
 	/**
 	 * id of owner
@@ -662,7 +709,7 @@ class DiscordGuild extends DiscordObjectParser
 	/**
 	 * total permissions for the user in the guild (excludes overwrites)
 	 */
-	public string $permissions;
+	public ?string $permissions = null;
 
 	/**
 	 * voice region id for the guild (deprecated)
@@ -672,7 +719,7 @@ class DiscordGuild extends DiscordObjectParser
 	/**
 	 * id of afk channel
 	 */
-	public ?string $afk_channel_id;
+	public ?string $afk_channel_id = null;
 
 	/**
 	 * afk timeout in seconds
@@ -687,7 +734,7 @@ class DiscordGuild extends DiscordObjectParser
 	/**
 	 * the channel id that the widget will generate an invite to, or null if set to no invite
 	 */
-	public ?string $widget_channel_id;
+	public ?string $widget_channel_id = null;
 
 	/**
 	 * verification level required for the guild
@@ -727,12 +774,12 @@ class DiscordGuild extends DiscordObjectParser
 	/**
 	 * application id of the guild creator if it is bot-created
 	 */
-	public ?string $application_id;
+	public ?string $application_id = null;
 
 	/**
 	 * the id of the channel where guild notices such as welcome messages and boost events are posted
 	 */
-	public ?string $system_channel_id;
+	public ?string $system_channel_id = null;
 
 	/**
 	 * system channel flags
@@ -742,57 +789,57 @@ class DiscordGuild extends DiscordObjectParser
 	/**
 	 * the id of the channel where Community guilds can display rules and/or guidelines
 	 */
-	public ?string $rules_channel_id;
+	public ?string $rules_channel_id = null;
 
 	/**
 	 * when this guild was joined at
 	 */
-	public string $joined_at;
+	public ?string $joined_at = null;
 
 	/**
 	 * true if this is considered a large guild
 	 */
-	public bool $large;
+	public ?bool $large = null;
 
 	/**
 	 * 	true if this guild is unavailable due to an outage
 	 */
-	public bool $unavailable;
+	public ?bool $unavailable = null;
 
 	/**
 	 * 	total number of members in this guild
 	 */
-	public int $member_count;
+	public ?int $member_count = null;
 
 	/**
 	 * states of members currently in voice channels; lacks the guild_id key
 	 */
-	public array $voice_states;
+	public ?array $voice_states = null;
 
 	/**
 	 * users in the guild
 	 */
-	public array $members;
+	public ?array $members = null;
 
 	/**
 	 * channels in the guild
 	 */
-	public array $channels;
+	public ?array $channels = null;
 
 	/**
 	 * all active threads in the guild that current user has permission to view
 	 */
-	public array $threads;
+	public ?array $threads = null;
 
 	/**
 	 * presences of the members in the guild, will only include non-offline members if the size is greater than large threshold
 	 */
-	public array $presences;
+	public ?array $presences = null;
 
 	/**
 	 * the maximum number of presences for the guild (null is always returned, apart from the largest of guilds)
 	 */
-	public ?int $max_presences;
+	public ?int $max_presences = 0;
 
 	/**
 	 * 	the maximum number of members for the guild
@@ -802,17 +849,17 @@ class DiscordGuild extends DiscordObjectParser
 	/**
 	 * 	the vanity url code for the guild
 	 */
-	public ?string $vanity_url_code;
+	public ?string $vanity_url_code = null;
 
 	/**
 	 * the description of a Community guild
 	 */
-	public ?string $description;
+	public ?string $description = null;
 
 	/**
 	 * banner hash
 	 */
-	public ?string $banner;
+	public ?string $banner = null;
 
 	/**
 	 * premium tier (Server Boost level)
@@ -832,7 +879,7 @@ class DiscordGuild extends DiscordObjectParser
 	/**
 	 * the id of the channel where admins and moderators of Community guilds receive notices from Discord
 	 */
-	public ?string $public_updates_channel_id;
+	public ?string $public_updates_channel_id = null;
 
 	/**
 	 * the maximum amount of users in a video channel
@@ -841,12 +888,12 @@ class DiscordGuild extends DiscordObjectParser
 	/**
 	 * approximate number of members in this guild, returned from the GET /guilds/<id> endpoint when with_counts is true
 	 */
-	public int $approximate_member_count;
+	public ?int $approximate_member_count = null;
 
 	/**
 	 * approximate number of non-offline members in this guild, returned from the GET /guilds/<id> endpoint when with_counts is true
 	 */
-	public int $approximate_presence_count;
+	public ?int $approximate_presence_count = null;
 
 	/**
 	 * the welcome screen of a Community guild, shown to new members, returned in an Invite's guild object
@@ -856,12 +903,12 @@ class DiscordGuild extends DiscordObjectParser
 	/**
 	 * 	guild NSFW level
 	 */
-	public int $nsfw_level;
+	public ?int $nsfw_level = null;
 
 	/**
 	 * 	Stage instances in the guild
 	 */
-	public array $stage_instances;
+	public ?array $stage_instances = null;
 	/**
 	 * 	custom guild stickers
 	 */
