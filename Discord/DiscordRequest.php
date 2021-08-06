@@ -72,6 +72,7 @@ class DiscordRequest
 
     private const API_URL = "https://discord.com/api/";
     private array $headers = [];
+    private array $postfields = [];
     private array $jsonBody = [];
     
     public function __construct(public string $route, public string $method, string $content_type = "application/json")
@@ -95,6 +96,16 @@ class DiscordRequest
         $this->SetHeader("Content-Length: " . strlen(json_encode($any)));
     }
 
+    public function AddPostField(mixed $any) : void
+    {
+        array_push($this->postfields, $any);
+    }
+
+    public function SetPostFields(array $fields) : void
+    {
+        $this->postfields = $fields;
+    }
+
     /**
      * Send request to Discord API
      * @throws DiscordInvalidResponseException
@@ -113,6 +124,9 @@ class DiscordRequest
 
             if(isset($this->jsonBody) && !empty($this->jsonBody))
                 curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($this->jsonBody, JSON_THROW_ON_ERROR));
+
+            if(isset($this->postfields) && !empty($this->postfields))
+                curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($this->postfields));
             
             $response = curl_exec($curl);
             $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
