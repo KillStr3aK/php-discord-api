@@ -12,7 +12,7 @@ class DiscordOAuth
     public function __construct(public string $client, public string $secret, public string $redirect)
     {
         $request = new DiscordRequest("oauth2/token", DiscordRequest::HTTPRequestMethod_POST);
-        $request->SetJsonBody(array(
+        $request->SetPostFields(array(
             "client_id" => $this->client,
             "client_secret" => $this->secret,
             "redirect_uri" => $this->redirect,
