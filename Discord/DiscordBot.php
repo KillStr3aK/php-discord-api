@@ -53,9 +53,9 @@ class DiscordBot
     public function GetGuildChannels(string $id) : array
     {
         $result = array($this->SendRequest("guilds/$id/channels", DiscordRequest::HTTPRequestMethod_GET));
-        foreach($result as $value)
+        foreach($result as $index => $value)
         {
-            $value = new DiscordChannel($value);
+            $result[$index] = new DiscordChannel($value);
         }
 
         return $result;
@@ -87,9 +87,9 @@ class DiscordBot
             $route .= "&after=$after";
 
         $result = array($this->SendRequest($route, DiscordRequest::HTTPRequestMethod_GET));
-        foreach($result as $value)
+        foreach($result as $index => $value)
         {
-            $value = new DiscordGuildMember($value);
+            $result[$index] = new DiscordGuildMember($value);
         }
 
         return $result;
@@ -101,9 +101,9 @@ class DiscordBot
     public function SearchGuildMember(string $id, string $query, int $limit = 1) : array
     {
         $result = array($this->SendRequest("guilds/$id/members/search?query=$query&limit=$limit", DiscordRequest::HTTPRequestMethod_GET));
-        foreach($result as $value)
+        foreach($result as $index => $value)
         {
-            $value = new DiscordGuildMember($value);
+            $result[$index] = new DiscordGuildMember($value);
         }
 
         return $result;
@@ -184,9 +184,9 @@ class DiscordBot
     public function GetGuildBans(string $guild_id) : array
     {
         $result = array($this->SendRequest("guilds/$guild_id/bans", DiscordRequest::HTTPRequestMethod_GET));
-        foreach($result as $value)
+        foreach($result as $index => $value)
         {
-            $value = new BanObject($value);
+            $result[$index] = new BanObject($value);
         }
 
         return $result;
@@ -198,9 +198,9 @@ class DiscordBot
     public function GetGuildRoles(string $id) : array
     {
         $result = array($this->SendRequest("guilds/$id/roles", DiscordRequest::HTTPRequestMethod_GET));
-        foreach($result as $value)
+        foreach($result as $index => $value)
         {
-            $value = new DiscordRole($value);
+            $result[$index] = new DiscordRole($value);
         }
 
         return $result;
@@ -240,9 +240,9 @@ class DiscordBot
     public function GetCurrentUserGuilds() : array
     {
         $result = array($this->SendRequest("users/@me/guilds", DiscordRequest::HTTPRequestMethod_GET));
-        foreach($result as $value)
+        foreach($result as $index => $value)
         {
-            $value = new DiscordChannel($value);
+            $result[$index] = new DiscordChannel($value);
         }
 
         return $result;
