@@ -32,7 +32,6 @@ class DiscordBot
     }
 
     /**
-     * !! NOT WORKS => Bad Request !!
      * Modify a guild's settings. Requires the MANAGE_GUILD permission. Returns the updated guild object on success. Fires a Guild Update Gateway event.
      */
     public function ModifyGuild(string $id, ModifyDiscordGuild $modify) : DiscordGuild
@@ -93,7 +92,6 @@ class DiscordBot
     }
 
     /**
-     * !! NOT WORKS => Bad Request !!
      * Modify attributes of a guild member. Returns a 200 OK with the guild member as the body. Fires a Guild Member Update Gateway event. If the channel_id is set to null, this will force the target user to be disconnected from voice.
      */
     public function ModifyGuildMember(string $guild_id, string $user_id, ModifyDiscordGuildMember $modify) : DiscordGuildMember
@@ -102,7 +100,6 @@ class DiscordBot
     }
 
     /**
-     * !! NOT WORKS => Bad Request !!
      * Modifies the nickname of the current user in a guild. Returns a 200 with the nickname on success. Fires a Guild Member Update Gateway event.
      * @param ?string $nick 	value to set users nickname to, requires CHANGE_NICKNAME permission
      */
@@ -136,7 +133,6 @@ class DiscordBot
     }
 
     /**
-     * !! NOT WORKS => Bad Request !!
      * Create a guild ban, and optionally delete previous messages sent by the banned user. Requires the BAN_MEMBERS permission. Returns a 204 empty response on success. Fires a Guild Ban Add Gateway event.
      */
     public function BanMember(string $guild_id, string $user_id, string $reason, int $deleteMessages) : void
