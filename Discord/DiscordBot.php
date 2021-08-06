@@ -203,7 +203,8 @@ class DiscordBot
     }
 
     /**
-     * Returns a ban object for the given user or a 404 not found if the ban cannot be found. Requires the BAN_MEMBERS permission.
+     * Returns a ban object for the given user or a 404 not found if the ban cannot be found.
+     * Requires the BAN_MEMBERS permission.
      */
     public function GetGuildBan(string $guild_id, string $user_id) : BanObject
     {
@@ -211,7 +212,8 @@ class DiscordBot
     }
 
     /**
-     * Returns a list of ban objects for the users banned from this guild. Requires the BAN_MEMBERS permission.
+     * Returns a list of ban objects for the users banned from this guild.
+     * Requires the BAN_MEMBERS permission.
      */
     public function GetGuildBans(string $guild_id) : array
     {
@@ -239,7 +241,8 @@ class DiscordBot
     }
 
     /**
-     * Returns the user object of the requester's account. For OAuth2, this requires the identify scope, which will return the object without an email, and optionally the email scope, which returns the object with an email.
+     * Returns the user object of the requester's account.
+     * For OAuth2, this requires the identify scope, which will return the object without an email, and optionally the email scope, which returns the object with an email.
      */
     public function GetCurrentUser() : DiscordUser
     {
@@ -255,7 +258,8 @@ class DiscordBot
     }
 
     /**
-     * Modify the requester's user account settings. Returns a user object on success.
+     * Modify the requester's user account settings.
+     * Returns a user object on success.
      */
     public function ModifyCurrentUser(string $username, mixed $avatar = null) : DiscordUser
     {
@@ -267,7 +271,8 @@ class DiscordBot
     }
 
     /**
-     * Returns a list of partial guild objects the current user is a member of. Requires the guilds OAuth2 scope.
+     * Returns a list of partial guild objects the current user is a member of.
+     * Requires the guilds OAuth2 scope.
      */
     public function GetCurrentUserGuilds() : array
     {
@@ -281,7 +286,8 @@ class DiscordBot
     }
 
     /**
-     * Leave a guild. Returns a 204 empty response on success.
+     * Leave a guild.
+     * Returns a 204 empty response on success.
      */
     public function LeaveGuild(string $id) : void
     {
