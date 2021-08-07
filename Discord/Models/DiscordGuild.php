@@ -433,12 +433,12 @@ class DiscordGuild extends DiscordObjectParser
 {
 	private const InitializeProperties =
 	[	/*Property Name */			/* to */
-		"stage_instances"	=> "DiscordGuildStageInstance",
-		"roles"				=> "DiscordRole",
-		"emojis"			=> "DiscordEmoji",
-		"members"			=> "DiscordGuildMember",
-		"channels"			=> "DiscordChannel",
-		"threads"			=> "DiscordChannel"
+		"stage_instances"	=> "DiscordGuildStageInstance[]",
+		"roles"				=> "DiscordRole[]",
+		"emojis"			=> "DiscordEmoji[]",
+		"members"			=> "DiscordGuildMember[]",
+		"channels"			=> "DiscordChannel[]",
+		"threads"			=> "DiscordChannel[]"
 	];
 
 	public function __construct(array $properties = array())

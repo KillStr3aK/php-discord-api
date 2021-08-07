@@ -79,7 +79,7 @@ class DiscordUser extends DiscordObjectParser
     /**
      * whether the user belongs to an OAuth2 application
      */
-    public bool $bot;
+    public ?bool $bot = null;
 
     /**
      * whether the user is an Official Discord System user (part of the urgent message system)

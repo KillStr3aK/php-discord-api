@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/Models/DiscordObject.php";
+require_once __DIR__ . "/Models/DiscordObjectParser.php";
 
 require_once __DIR__ . "/Models/DiscordChannelOverwriteObject.php";
 

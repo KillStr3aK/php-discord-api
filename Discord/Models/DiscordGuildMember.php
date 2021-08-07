@@ -36,7 +36,7 @@ class DiscordGuildMember extends DiscordObjectParser
 	/**
 	 * when the user started boosting the guild
 	 */
-	public string $premium_since;
+	public ?string $premium_since;
 
 	/**
 	 * whether the user is deafened in voice channels
