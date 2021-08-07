@@ -453,6 +453,70 @@ class DiscordBot
     }
 
     /**
+     * Returns a list of emoji objects for the given guild.
+     * @return array of DiscordEmoji objects.
+     */
+    public function GetGuildEmojis(string $guild_id) : array
+    {
+        $result = $this->SendRequest("guilds/$guild_id/emojis", DiscordRequest::HTTPRequestMethod_GET);
+        foreach($result as $index => $value)
+        {
+            $result[$index] = new DiscordEmoji($value);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns an emoji object for the given guild and emoji IDs.
+     * @return DiscordEmoji object for the given guild and emoji IDs.
+     */
+    public function GetGuildEmoji(string $guild_id, string $emoji_id) : DiscordEmoji
+    {
+        return new DiscordEmoji($this->SendRequest("guilds/$guild_id/emojis/$emoji_id", DiscordRequest::HTTPRequestMethod_GET));
+    }
+
+    /**
+     * Create a new emoji for the guild.
+     * Requires the MANAGE_EMOJIS_AND_STICKERS permission.
+     * Returns the new emoji object on success.
+     * Fires a Guild Emojis Update Gateway event.
+     * Emojis and animated emojis have a maximum file size of 256kb.
+     * Attempting to upload an emoji larger than this limit will fail and return 400 Bad Request and an error message, but not a JSON status code.
+     * @param string $name name of the emoji.
+     * @param mixed $imagedata 128x128 emoji image. See: https://discord.com/developers/docs/reference#image-data.
+     * @param array $roles roles allowed to use this emoji (array of snowflakes).
+     * @return DiscordEmoji object on success.
+     */
+    public function CreateGuildEmoji(string $guild_id, string $name, mixed $imagedata, array $roles) : DiscordEmoji
+    {
+        return new DiscordEmoji($this->SendRequest("guilds/$guild_id/emojis", DiscordRequest::HTTPRequestMethod_POST, [ "name" => $name, "image" => $imagedata, "roles" => $roles ]));
+    }
+
+    /**
+     * Modify the given emoji.
+     * Requires the MANAGE_EMOJIS_AND_STICKERS permission.
+     * Returns the updated emoji object on success.
+     * Fires a Guild Emojis Update Gateway event.
+     * @return DiscordEmoji object on success.
+     */
+    public function ModifyGuildEmoji(string $guild_id, string $emoji_id, string $name, ?array $roles = null) : DiscordEmoji
+    {
+        return new DiscordEmoji($this->SendRequest("guilds/$guild_id/emojis/$emoji_id", DiscordRequest::HTTPRequestMethod_PATCH, [ "name" => $name, "roles" => $roles ]));
+    }
+
+    /**
+     * Delete the given emoji.
+     * Requires the MANAGE_EMOJIS_AND_STICKERS permission.
+     * Returns 204 No Content on success.
+     * Fires a Guild Emojis Update Gateway event.
+     */
+    public function DeleteGuildEmoji(string $guild_id, string $emoji_id) : void
+    {
+        $this->SendRequest("guilds/$guild_id/emojis/$emoji_id", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
      * Send request to the Discord API.
      * @param string $route API route.
      * @param string $method HTTP Request method.

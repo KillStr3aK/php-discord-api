@@ -147,37 +147,37 @@ class DiscordUser extends DiscordObjectParser
     /**
      * whether the user is an Official Discord System user (part of the urgent message system)
      */
-    public bool $system;
+    public ?bool $system = null;
 
     /**
      * 	whether the user has two factor enabled on their account
      */
-    public bool $mfa_enabled;
+    public ?bool $mfa_enabled = null;
 
     /**
      * the user's chosen language option
      */
-    public string $locale;
+    public ?string $locale = null;
 
     /**
      * whether the email on this account has been verified
      */
-    public bool $verified;
+    public ?bool $verified = null;
 
     /**
      * the user's email
      */
-    public ?string $email;
+    public ?string $email = null;
 
     /**
      * the flags on a user's account
      */
-    public int $flags;
+    public ?int $flags = null;
 
     /**
      * the type of Nitro subscription on a user's account
      */
-    public int $premium_type;
+    public ?int $premium_type = null;
 
     /**
      * the public flags on a user's account
