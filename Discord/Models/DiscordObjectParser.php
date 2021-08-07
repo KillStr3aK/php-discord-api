@@ -25,7 +25,7 @@ abstract class DiscordObjectParser
 				if(isset($this->{$property}))
 				{
 					// is marked as array
-					$isArray = str_ends_with($value, "[]");
+					$isArray = substr($value, -2) == "[]";
 					$include = $value;
 
 					if($isArray)
