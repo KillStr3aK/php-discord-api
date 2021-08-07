@@ -1,2 +1,3 @@
 # php-discord-api
-PHP Discord API
+PHP Discord API & OAuth2
+PHP 8.0>=
