@@ -1,32 +1,16 @@
 <?php
 namespace Nexd\Discord;
 
-class DiscordRoleTags extends DiscordObjectParser
-{
-    /**
-     * the id of the bot this role belongs to
-     */
-    public string $bot_id;
-
-    /**
-     * 	the id of the integration this role belongs to
-     */
-    public string $integration_id;
-
-    /**
-     * whether this is the guild's premium subscriber role
-     */
-    public ?bool $premium_subscriber;
-}
-
 class DiscordRole extends DiscordObjectParser
 {
-    public function __construct(array $properties = array())
+    private const InitializeProperties =
+	[	/*Property Name */			/* to */
+		"tags"	            => "DiscordRoleTags"
+	];
+
+	public function __construct(array $properties = array())
 	{
-		parent::__construct($properties);
-		
-		if(isset($properties["tags"]))
-			$this->tags = new DiscordRoleTags($properties["tags"]);
+		parent::__construct($properties, self::InitializeProperties);
 	}
 
     /**

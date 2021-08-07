@@ -158,15 +158,15 @@ class ModifyDiscordMessage
 
 class DiscordMessage extends DiscordObjectParser
 {
-    public function __construct(array $properties = array())
+    private const InitializeProperties =
+	[	/*Property Name */			/* to */
+		"author"	        => "DiscordUser",
+		"member"            => "DiscordGuildMember"
+	];
+
+	public function __construct(array $properties = array())
 	{
-		parent::__construct($properties);
-		
-		if(isset($properties["author"]))
-			$this->author = new DiscordUser($properties["author"]);
-        
-        if(isset($properties["member"]))
-			$this->member = new DiscordGuildMember($properties["member"]);
+		parent::__construct($properties, self::InitializeProperties);
 	}
 
     /**

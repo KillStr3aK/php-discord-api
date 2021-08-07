@@ -59,62 +59,6 @@ class DiscordChannelType
     public const GUILD_STAGE_VOICE  = 13;
 }
 
-class DiscordChannelOverwriteObject extends DiscordObjectParser
-{
-    /**
-     * role or user id
-     */
-    public string $id;
-
-    /**
-     * either 0 (role) or 1 (member)
-     */
-    public int $type;
-
-    /**
-     * permission bit set
-     */
-    public string $allow;
-
-    /**
-     * permission bit set
-     */
-    public string $deny;
-}
-
-class VoiceRegion extends DiscordObjectParser
-{
-    /**
-     * unique ID for the region
-     */
-    public string $id;
-
-    /**
-     * name of the region
-     */
-    public string $name;
-
-    /**
-     * 	true if this is a vip-only server
-     */
-    public bool $vip;
-
-    /**
-     * 	true for a single server that is closest to the current user's client
-     */
-    public bool $optimal;
-
-    /**
-     * whether this is a deprecated voice region (avoid switching to these)
-     */
-    public bool $deprecated;
-
-    /**
-     * 	whether this is a custom voice region (used for events/etc)
-     */
-    public bool $custom;
-}
-
 class VideoQualityModes
 {
     /**
@@ -126,52 +70,6 @@ class VideoQualityModes
      * 720p
      */
     public const FULL = 2;
-}
-
-class ThreadMetadata extends DiscordObjectParser
-{
-    /**
-     * whether the thread is archived
-     */
-    public bool $archived;
-
-    /**
-     * duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
-     */
-    public int $auto_archive_duration;
-
-    /**
-     * 	timestamp when the thread's archive status was last changed, used for calculating recent activity
-     */
-    public string $archive_timestamp;
-
-    /**
-     * whether the thread is locked; when a thread is locked, only users with MANAGE_THREADS can unarchive it
-     */
-    public bool $locked;
-}
-
-class ThreadMember extends DiscordObjectParser
-{
-    /**
-     * the id of the thread
-     */
-    public string $id;
-
-    /**
-     * the id of the user
-     */
-    public string $user_id;
-
-    /**
-     * the time the current user last joined the thread
-     */
-    public string $join_timestamp;
-
-    /**
-     * any user-thread settings, currently only used for notifications
-     */
-    public int $flags;
 }
 
 class ModifyDiscordChannel
@@ -244,16 +142,16 @@ class ModifyDiscordChannel
 
 class DiscordChannel extends DiscordObjectParser
 {
-    public function __construct(array $properties = array())
-    {
-        parent::__construct($properties);
+    private const InitializeProperties =
+	[	/*Property Name */			/* to */
+		"thread_metadata"	=> "ThreadMetadata",
+		"member"            => "ThreadMember"
+	];
 
-        if(isset($this->thread_metadata))
-            $this->thread_metadata = new ThreadMetadata($this->thread_metadata);
-           
-        if(isset($this->member))
-            $this->member = new ThreadMember($this->member);
-    }
+	public function __construct(array $properties = array())
+	{
+		parent::__construct($properties, self::InitializeProperties);
+	}
 
     /**
      * the id of this channel

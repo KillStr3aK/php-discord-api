@@ -3,12 +3,14 @@ namespace Nexd\Discord;
 
 class DiscordEmoji extends DiscordObjectParser
 {
-    public function __construct(array $properties = array())
+    private const InitializeProperties =
+	[	/*Property Name */			/* to */
+		"user"	            => "DiscordUser"
+	];
+
+	public function __construct(array $properties = array())
 	{
-		parent::__construct($properties);
-		
-		if(isset($properties["user"]))
-			$this->user = new DiscordUser($properties["user"]);
+		parent::__construct($properties, self::InitializeProperties);
 	}
     
     /**

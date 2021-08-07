@@ -182,7 +182,8 @@ class DiscordBot
 
     /**
      * Create a guild ban, and optionally delete previous messages sent by the banned user.
-     * Requires the BAN_MEMBERS permission. Returns a 204 empty response on success.
+     * Requires the BAN_MEMBERS permission.
+     * Returns a 204 empty response on success.
      * Fires a Guild Ban Add Gateway event.
      */
     public function BanMember(string $guild_id, string $user_id, string $reason, int $deleteMessages) : void
@@ -200,6 +201,11 @@ class DiscordBot
             $json["reason"] = $reason;
         
         $this->SendRequest("guilds/$guild_id/bans/$user_id", DiscordRequest::HTTPRequestMethod_PUT, $json);
+    }
+
+    public function UnbanMember(string $guild_id, string $user_id)
+    {
+        //TODO
     }
 
     /**
@@ -514,6 +520,26 @@ class DiscordBot
     public function DeleteGuildEmoji(string $guild_id, string $emoji_id) : void
     {
         $this->SendRequest("guilds/$guild_id/emojis/$emoji_id", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
+     * Updates another user's voice state.
+     * For caveats, see: https://discord.com/developers/docs/resources/guild#modify-user-voice-state-caveats.
+     * @param string $channel_id the id of the channel the user is currently in.
+     * @param bool $suppress toggles the user's suppress state.
+     */
+    public function ModifyUserVoiceState(string $guild_id, string $user_id, string $channel_id, bool $suppress) : void
+    {
+        $this->SendRequest("guilds/$guild_id/voice-states/$user_id", DiscordRequest::HTTPRequestMethod_PATCH, [ "channel_id" => $channel_id, "suppress" => $suppress ]);
+    }
+
+    /**
+     * Updates the current user's voice state.
+     * For caveats, see: https://discord.com/developers/docs/resources/guild#modify-current-user-voice-state-caveats.
+     */
+    public function ModifyCurrentUserVoiceState(string $guild_id, string $channel_id, bool $suppress, ?string $request_to_speak_timestamp = null) : void
+    {
+        $this->SendRequest("guilds/$guild_id/voice-states/@me", DiscordRequest::HTTPRequestMethod_PATCH, [ "channel_id" => $channel_id, "suppress" => $suppress, "request_to_speak_timestamp" => $request_to_speak_timestamp ]);
     }
 
     /**

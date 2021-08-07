@@ -54,69 +54,6 @@ class ConnectionVisibilityType
     public const Everyone = 1;
 }
 
-class DiscordConnection extends DiscordObjectParser
-{
-    /**
-     * id of the connection account
-     */
-    public string $id;
-
-    /**
-     * the username of the connection account
-     */
-    public string $name;
-
-    /**
-     * the service of the connection (twitch, youtube)
-     */
-    public string $type;
-
-    /**
-     * 	whether the connection is revoked
-     */
-    public bool $revoked;
-
-    /**
-     * an array of partial server integrations
-     */
-    public array $integrations;
-
-    /**
-     * whether the connection is verified
-     */
-    public bool $verified;
-
-    /**
-     * whether friend sync is enabled for this connection
-     */
-    public bool $friend_sync;
-
-    /**
-     * whether activities related to this connection will be shown in presence updates
-     */
-    public bool $show_activity;
-
-    /**
-     * visibility of this connection
-     */
-    public int $visibility;
-}
-
-class BanObject extends DiscordObjectParser
-{
-    public function __construct(array $properties = array())
-	{
-		parent::__construct($properties);
-		
-		if(isset($properties["user"]))
-			$this->user = new DiscordUser($properties["user"]);
-	}
-
-    public ?string $reason;
-
-    public $user;
-}
-
 class DiscordUser extends DiscordObjectParser
 {
     /**

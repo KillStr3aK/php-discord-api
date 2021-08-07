@@ -8,71 +8,17 @@ class IntegrationExpireBehavior
     public const Kick = 1;
 }
 
-class IntegrationAccount extends DiscordObjectParser
-{
-    /**
-     * id of the account
-     */
-    public string $id;
-
-    /**
-     * name of the account
-     */
-    public string $name;
-}
-
-class IntegrationApplication extends DiscordObjectParser
-{
-    public function __construct(array $properties = array())
-	{
-		parent::__construct($properties);
-		
-		if(isset($properties["bot"]))
-			$this->bot = new DiscordUser($properties["bot"]);
-	}
-
-    /**
-     * the id of the app
-     */
-    public string $id;
-
-    /**
-     * 	the name of the app
-     */
-    public string $name;
-
-    /**
-     * the icon hash of the app
-     */
-    public ?string $icon;
-
-    /**
-     * the description of the app
-     */
-    public string $description;
-
-    /**
-     * 	the summary of the app
-     */
-    public string $summary;
-
-    /**
-     * the bot associated with this application
-     */
-    public $bot;
-}
-
 class DiscordIntegration extends DiscordObjectParser
 {
-    public function __construct(array $properties = array())
-	{
-		parent::__construct($properties);
-		
-		if(isset($properties["user"]))
-			$this->user = new DiscordUser($properties["user"]);
+    private const InitializeProperties =
+	[	/*Property Name */			/* to */
+		"user"	            => "DiscordUser",
+        "account"           => "IntegrationAccount"
+	];
 
-        if(isset($properties["account"]))
-			$this->account = new IntegrationAccount($properties["account"]);
+	public function __construct(array $properties = array())
+	{
+		parent::__construct($properties, self::InitializeProperties);
 	}
 
     /**

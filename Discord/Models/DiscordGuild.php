@@ -404,184 +404,6 @@ class ModifyDiscordGuild
 	public ?string $description;
 }
 
-class DiscordGuildPreview extends DiscordObjectParser
-{
-	/**
-	 * guild id
-	 */
-	public string $id;
-
-	/**
-	 * guild name (2-100 characters)
-	 */
-	public string $name;
-
-	/**
-	 * 	icon hash
-	 */
-	public ?string $icon;
-
-	/**
-	 * splash hash
-	 */
-	public ?string $splash;
-
-	/**
-	 * discovery splash hash
-	 */
-	public ?string $discovery_splash;
-
-	/**
-	 * custom guild emojis
-	 */
-	public array $emojis;
-
-	/**
-	 * 	enabled guild features
-	 */
-	public array $features;
-
-	/**
-	 * approximate number of members in this guild
-	 */
-	public int $approximate_member_count;
-
-	/**
-	 * approximate number of online members in this guild
-	 */
-	public int $approximate_presence_count;
-
-	/**
-	 * 	the description for the guild, if the guild is discoverable
-	 */
-	public ?string $description;
-}
-
-class DiscordGuildMember extends DiscordObjectParser
-{
-	public function __construct(array $properties = array())
-	{
-		parent::__construct($properties);
-		
-		if(isset($properties["user"]))
-			$this->user = new DiscordUser($properties["user"]);
-	}
-
-	/**
-	 * the user this guild member represents
-	 */
-	public $user;
-
-	/**
-	 * 	this users guild nickname
-	 */
-	public ?string $nick;
-
-	/**
-	 * array of role object ids
-	 */
-	public array $roles;
-
-	/**
-	 * when the user joined the guild
-	 */
-	public string $joined_at;
-
-	/**
-	 * when the user started boosting the guild
-	 */
-	public string $premium_since;
-
-	/**
-	 * whether the user is deafened in voice channels
-	 */
-	public bool $deaf;
-
-	/**
-	 * 	whether the user is muted in voice channels
-	 */
-	public bool $mute;
-
-	/**
-	 * whether the user has not yet passed the guild's Membership Screening requirements
-	 */
-	public bool $pending;
-
-	/**
-	 * total permissions of the member in the channel, including overwrites, returned when in the interaction object
-	 */
-	public string $permissions;
-}
-
-class DiscordGuildWelcomeScreenChannel extends DiscordObjectParser
-{
-	/**
-	 * the channel's id
-	 */
-	public string $channel_id;
-
-	/**
-	 * 	the description shown for the channel
-	 */
-	public string $description;
-
-	/**
-	 * the emoji id, if the emoji is custom
-	 */
-	public ?string $emoij_id;
-
-	/**
-	 * the emoji name if custom, the unicode character if standard, or null if no emoji is set
-	 */
-	public ?string $emoji_name;
-}
-
-class DiscordGuildWelcomeScreen extends DiscordObjectParser
-{
-	/**
-	 * the server description shown in the welcome screen
-	 */
-	public ?string $description;
-
-	/**
-	 * the channels shown in the welcome screen, up to 5
-	 */
-	public array $welcome_channels;
-}
-
-class DiscordGuildStageInstance extends DiscordObjectParser
-{
-	/**
-	 * The id of this Stage instance
-	 */
-	public string $id;
-
-	/**
-	 * The guild id of the associated Stage channel
-	 */
-	public string $guild_id;
-
-	/**
-	 * 	The id of the associated Stage channel
-	 */
-	public string $channel_id;
-
-	/**
-	 * The topic of the Stage instance (1-120 characters)
-	 */
-	public string $topic;
-
-	/**
-	 * The privacy level of the Stage instance
-	 */
-	public int $privacy_level;
-
-	/**
-	 * 	Whether or not Stage Discovery is disabled
-	 */
-	public bool $discoverable_disabled;
-}
-
 class DiscordGuildStickerType
 {
 	/**
@@ -604,82 +426,26 @@ class DiscordGuildStickerFormat
 	public const LOTTIE = 3;
 }
 
-class DiscordGuildSticker extends DiscordObjectParser
-{
-	public function __construct(array $properties = array())
-	{
-		parent::__construct($properties);
-		
-		if(isset($properties["user"]))
-			$this->user = new DiscordUser($properties["user"]);
-	}
-	
-	/**
-	 * 	id of the sticker
-	 */
-	public string $id;
-
-	/**
-	 * for standard stickers, id of the pack the sticker is from
-	 */
-	public string $pack_id;
-
-	/**
-	 * 	name of the sticker
-	 */
-	public string $name;
-
-	/**
-	 * description of the sticker
-	 */
-	public ?string $description;
-
-	/**
-	 * for guild stickers, the Discord name of a unicode emoji representing the sticker's expression. for standard stickers, a comma-separated list of related expressions.
-	 */
-	public string $tags;
-
-	/**
-	 * Deprecated previously the sticker asset hash, now an empty string
-	 */
-	public string $asset;
-
-	/**
-	 * type of sticker
-	 */
-	public int $type;
-
-	/**
-	 * type of sticker format
-	 */
-	public int $format_type;
-
-	/**
-	 * 	whether this guild sticker can be used, may be false due to loss of Server Boosts
-	 */
-	public bool $available;
-
-	/**
-	 * 	id of the guild that owns this sticker
-	 */
-	public string $guild_id;
-
-	/**
-	 * the user that uploaded the guild sticker
-	 */
-	public $user;
-
-	/**
-	 * the standard sticker's sort order within its pack
-	 */
-	public int $sort_value;
-}
-
 /**
  * Guilds in Discord represent an isolated collection of users and channels, and are often referred to as "servers" in the UI.
 */
 class DiscordGuild extends DiscordObjectParser
 {
+	private const InitializeProperties =
+	[	/*Property Name */			/* to */
+		"stage_instances"	=> "DiscordGuildStageInstance",
+		"roles"				=> "DiscordRole",
+		"emojis"			=> "DiscordEmoji",
+		"members"			=> "DiscordGuildMember",
+		"channels"			=> "DiscordChannel",
+		"threads"			=> "DiscordChannel"
+	];
+
+	public function __construct(array $properties = array())
+	{
+		parent::__construct($properties, self::InitializeProperties);
+	}
+
 	/**
      * guild id
      */
