@@ -2,7 +2,7 @@
 namespace Nexd\Discord;
 
 /**
- * Every class that inherits from this class has to be in its own file with the same name.
+ * Every class that inherits from this class has to be in their own file with the same name.
  */
 abstract class DiscordObjectParser
 {
