@@ -3,4 +3,4 @@ PHP Discord API & OAuth2
 
 PHP Version:
 * OAuth: atleast 8.0
-* API: atleast 7.3
+* API: atleast 8.0
