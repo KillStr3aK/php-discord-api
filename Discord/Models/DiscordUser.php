@@ -1,36 +1,35 @@
 <?php
 namespace Nexd\Discord;
 
-// Wrong?!
 class UserFlags
 {
     public const None = 0;
 
-    public const DiscordEmployee = 0b0000; // (1 << 0)
+    public const DiscordEmployee = (1 << 0);
 
-    public const PartneredServerOwner = 0b0001; // (1 << 1)
+    public const PartneredServerOwner = (1 << 1);
 
-    public const HypeSquadEvents = 0b0010; // (1 << 2)
+    public const HypeSquadEvents = (1 << 2);
 
-    public const BugHunterLevel1 = 0b0001 | 0b0010; // (1 << 3)
+    public const BugHunterLevel1 = (1 << 3);
 
-    public const HouseBravery = 0b0100 | 0b0010; // (1 << 6)
+    public const HouseBravery = (1 << 6);
 
-    public const HouseBrilliance = 0b0100 | 0b0010 | 0b0001; // (1 << 7)
+    public const HouseBrilliance = (1 << 7);
 
-    public const HouseBalance = 0b1000; // (1 << 8)
+    public const HouseBalance = (1 << 8);
 
-    public const EarlySupporter = 0b1000 | 0b0001; // (1 << 9)
+    public const EarlySupporter = (1 << 9);
 
-    public const TeamUser = 0b1000 | 0b0010; // (1 << 10)
+    public const TeamUser = (1 << 10);
 
-    public const BugHunterLevel2 = 0b1000 | 0b0100 | 0b0100; // (1 << 14)
+    public const BugHunterLevel2 = (1 << 14);
 
-    public const VerifiedBot = 0b1000 | 0b1000; // (1 << 16)
+    public const VerifiedBot = (1 << 16);
 
-    public const EarlyVerifiedBotDeveloper = 0b1000 | 0b1000 | 0b0001; // (1 << 17)
+    public const EarlyVerifiedBotDeveloper = (1 << 17);
 
-    public const DiscordCertifiedModerator = 0b1000 | 0b1000 | 0b0010;  // (1 << 18)
+    public const DiscordCertifiedModerator = (1 << 18);
 }
 
 class PremiumTypes

@@ -61,21 +61,21 @@ class MessageActivityType
 
 class MessageFlags
 {
-    public const CROSSPOSTED = 1 << 0;	// this message has been published to subscribed channels (via Channel Following)
+    public const CROSSPOSTED = (1 << 0);	// this message has been published to subscribed channels (via Channel Following)
 
-    public const IS_CROSSPOST = 1 << 1;	// this message originated from a message in another channel (via Channel Following)
+    public const IS_CROSSPOST = (1 << 1);	// this message originated from a message in another channel (via Channel Following)
 
-    public const SUPPRESS_EMBEDS = 1 << 2;	// do not include any embeds when serializing this message
+    public const SUPPRESS_EMBEDS = (1 << 2);	// do not include any embeds when serializing this message
 
-    public const SOURCE_MESSAGE_DELETED = 1 << 3;	// the source message for this crosspost has been deleted (via Channel Following)
+    public const SOURCE_MESSAGE_DELETED = (1 << 3);	// the source message for this crosspost has been deleted (via Channel Following)
 
-    public const URGENT = 1 << 4;	// this message came from the urgent message system
+    public const URGENT = (1 << 4);	// this message came from the urgent message system
 
-    public const HAS_THREAD = 1 << 5;	// this message has an associated thread, with the same id as the message
+    public const HAS_THREAD = (1 << 5);	// this message has an associated thread, with the same id as the message
 
-    public const EPHEMERAL = 1 << 6;	// this message is only visible to the user who invoked the Interaction
+    public const EPHEMERAL = (1 << 6);	// this message is only visible to the user who invoked the Interaction
 
-    public const LOADING = 1 << 7;	// this message is an Interaction Response and the bot is "thinking"
+    public const LOADING = (1 << 7);	// this message is an Interaction Response and the bot is "thinking"
 }
 
 class DiscordMessageReference
@@ -320,7 +320,7 @@ class DiscordMessage extends DiscordObjectParser
     public array $sticker_items;
 
     /**
-     * Deprecated the stickers sent with the message
+     * (deprecated) the stickers sent with the message
      */
     public array $stickers;
 }
