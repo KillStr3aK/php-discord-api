@@ -23,7 +23,7 @@ require_once __DIR__ . "/Models/VoiceRegion.php";
 
 require_once __DIR__ . "/Models/DiscordTeamMember.php";
 require_once __DIR__ . "/Models/DiscordTeam.php";
-require_once __DIR__ . "/Models/DiscordAccount.php";
+require_once __DIR__ . "/Models/DiscordApplication.php";
 
 require_once __DIR__ . "/Models/DiscordInviteStageInstance.php";
 require_once __DIR__ . "/Models/DiscordInviteMetadata.php";
