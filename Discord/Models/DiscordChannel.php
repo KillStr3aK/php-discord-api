@@ -140,6 +140,59 @@ class ModifyDiscordChannel
     public ?int $default_auto_archive_duration;
 }
 
+class CreateDiscordChannel
+{
+    /**
+     * 	channel name (1-100 characters)
+     */
+    public string $name;
+
+    /**
+     * the type of channel
+     */
+    public int $type;
+
+    /**
+     * channel topic (0-1024 characters)
+     */
+    public string $topic;
+
+    /**
+     * the bitrate (in bits) of the voice channel (voice only)
+     */
+    public int $bitrate;
+
+    /**
+     * 	the user limit of the voice channel (voice only)
+     */
+    public int $user_limit;
+
+    /**
+     * amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected
+     */
+    public int $rate_limit_per_user;
+
+    /**
+     * sorting position of the channel
+     */
+    public int $position;
+
+    /**
+     * the channel's permission overwrites
+     */
+    public array $permission_overwrites;
+
+    /**
+     * 	id of the parent category for a channel
+     */
+    public string $parent_id;
+
+    /**
+     * whether the channel is nsfw
+     */
+    public bool $nsfw;
+}
+
 class DiscordChannel extends DiscordObjectParser
 {
     private const InitializeProperties =

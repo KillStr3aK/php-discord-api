@@ -1,6 +1,38 @@
 <?php
 namespace Nexd\Discord;
 
+class ModifyDiscordRole
+{
+    /**
+     * name of the role
+     */
+    public string $name;
+
+    /**
+     * bitwise value of the enabled/disabled permissions
+     */
+    public string $permissions;
+
+    /**
+     * RGB color value
+     */
+    public int $color;
+
+    /**
+     * whether the role should be displayed separately in the sidebar
+     */
+    public bool $hoist;
+
+    /**
+     * whether the role should be mentionable
+     */
+    public bool $mentionable;
+}
+
+class CreateDiscordRole extends ModifyDiscordRole
+{
+}
+
 class DiscordRole extends DiscordObjectParser
 {
     private const InitializeProperties =

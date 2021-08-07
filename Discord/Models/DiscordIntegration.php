@@ -13,7 +13,8 @@ class DiscordIntegration extends DiscordObjectParser
     private const InitializeProperties =
 	[	/*Property Name */			/* to */
 		"user"	            => "DiscordUser",
-        "account"           => "IntegrationAccount"
+        "account"           => "IntegrationAccount",
+        "application"       => "IntegrationApplication"
 	];
 
 	public function __construct(array $properties = array())
@@ -94,6 +95,6 @@ class DiscordIntegration extends DiscordObjectParser
     /**
      * The bot/OAuth2 application for discord integrations
      */
-    public mixed $application;
+    public $application;
 }
 ?>

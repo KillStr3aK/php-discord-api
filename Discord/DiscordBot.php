@@ -13,6 +13,9 @@ use Nexd\Discord\ModifyDiscordGuild;
 use Nexd\Discord\ModifyDiscordGuildMember;
 use Nexd\Discord\ModifyDiscordChannel;
 use Nexd\Discord\ModifyDiscordMessage;
+use Nexd\Discord\ModifyDiscordRole;
+
+use Nexd\Discord\CreateDiscordRole;
 
 use Nexd\Discord\Exceptions\DiscordInvalidResponseException;
 
@@ -82,9 +85,20 @@ class DiscordBot
      * Returns all active threads in the guild, including public and private threads.
      * Threads are ordered by their id, in descending order.
      */
-    public function GetActiveThreads(string $id): array
+    public function GetActiveThreads(string $id) : array
     {
-        return $this->SendRequest("guilds/$id/threads/active", DiscordRequest::HTTPRequestMethod_GET);
+        $result = $this->SendRequest("guilds/$id/threads/active", DiscordRequest::HTTPRequestMethod_GET);
+        foreach($result["threads"] as $index => $value)
+        {
+            $result["threads"][$index] = new DiscordChannel($value);
+        }
+
+        foreach($result["members"] as $index => $value)
+        {
+            $result["members"][$index] = new ThreadMember($value);
+        }
+
+        return $result;
     }
 
     /**
@@ -142,7 +156,7 @@ class DiscordBot
      * Modifies the nickname of the current user in a guild.
      * Returns a 200 with the nickname on success.
      * Fires a Guild Member Update Gateway event.
-     * @param ?string $nick value to set users nickname to, requires CHANGE_NICKNAME permission
+     * @param null|string $nick value to set users nickname to, requires CHANGE_NICKNAME permission
      */
     public function ModifyCurrentUserNick(string $id, ?string $nick) : string
     {
@@ -203,9 +217,15 @@ class DiscordBot
         $this->SendRequest("guilds/$guild_id/bans/$user_id", DiscordRequest::HTTPRequestMethod_PUT, $json);
     }
 
-    public function UnbanMember(string $guild_id, string $user_id)
+    /**
+     * Remove the ban for a user.
+     * Requires the BAN_MEMBERS permissions.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Ban Remove Gateway event.
+     */
+    public function UnbanMember(string $guild_id, string $user_id) : void
     {
-        //TODO
+        $this->SendRequest("guilds/$guild_id/bans/$user_id", DiscordRequest::HTTPRequestMethod_DELETE);
     }
 
     /**
@@ -297,7 +317,7 @@ class DiscordBot
      */
     public function LeaveGuild(string $id) : void
     {
-        $this->SendRequest("users/@me/guilds/$id", DiscordRequest::HTTPRequestMethod_DELETE);
+        $this->SendRequest("users/@meguilds/$id", DiscordRequest::HTTPRequestMethod_DELETE);
     }
 
     /**
@@ -327,7 +347,13 @@ class DiscordBot
      */
     public function GetCurrentUserConnections() : array
     {
-        return $this->SendRequest("users/@me/connections", DiscordRequest::HTTPRequestMethod_GET);
+        $result = $this->SendRequest("users/@me/connections", DiscordRequest::HTTPRequestMethod_GET);
+        foreach($result as $index => $value)
+        {
+            $result[$index] = new DiscordConnection($value);
+        }
+
+        return $result;
     }
 
     /**
@@ -426,7 +452,10 @@ class DiscordBot
      * Other users can only edit flags and only if they have the MANAGE_MESSAGES permission in the corresponding channel.
      * When specifying flags, ensure to include all previously set flags/bits in addition to ones that you are modifying.
      * Only flags documented in the table below may be modified by users (unsupported flag changes are currently ignored without error).
-     * When the content field is edited, the mentions array in the message object will be reconstructed from scratch based on the new content. The allowed_mentions field of the edit request controls how this happens. If there is no explicit allowed_mentions in the edit request, the content will be parsed with default allowances, that is, without regard to whether or not an allowed_mentions was present in the request that originally created the message.
+     * When the content field is edited, the mentions array in the message object will be reconstructed from scratch based on the new content.
+     * The allowed_mentions field of the edit request controls how this happens.
+     * If there is no explicit allowed_mentions in the edit request, the content will be parsed with default allowances,
+     * that is, without regard to whether or not an allowed_mentions was present in the request that originally created the message.
      * @return DiscordMessage object. Fires a Message Update Gateway event.
      */
     public function EditMessage(string $channel_id, string $message_id, ModifyDiscordMessage $modify) : DiscordMessage
@@ -540,6 +569,274 @@ class DiscordBot
     public function ModifyCurrentUserVoiceState(string $guild_id, string $channel_id, bool $suppress, ?string $request_to_speak_timestamp = null) : void
     {
         $this->SendRequest("guilds/$guild_id/voice-states/@me", DiscordRequest::HTTPRequestMethod_PATCH, [ "channel_id" => $channel_id, "suppress" => $suppress, "request_to_speak_timestamp" => $request_to_speak_timestamp ]);
+    }
+
+    /**
+     * Returns a guild widget object.
+     * Requires the MANAGE_GUILD permission.
+     * @return DiscordGuildWidget object.
+     */
+    public function GetGuildWidgetSettings(string $guild_id) : DiscordGuildWidget
+    {
+        return new DiscordGuildWidget($this->SendRequest("guilds/$guild_id/widget", DiscordRequest::HTTPRequestMethod_GET));
+    }
+
+    /**
+     * Returns the widget for the guild.
+     * @return Example https://discord.com/developers/docs/resources/guild#get-guild-widget-example-get-guild-widget
+     */
+    public function GetGuildWidget(string $guild_id) : mixed
+    {
+        return $this->SendRequest("guilds/$guild_id/widget.json", DiscordRequest::HTTPRequestMethod_GET);
+    }
+
+    /**
+     * Modify a guild widget object for the guild.
+     * All attributes may be passed in with JSON and modified.
+     * Requires the MANAGE_GUILD permission.
+     * @return DiscordGuildWidget the updated guild widget object.
+     */
+    public function ModifyGuildWidget(string $guild_id, DiscordGuildWidget $modify) : DiscordGuildWidget
+    {
+        return new DiscordGuildWidget($this->SendRequest("guilds/$guild_id/widget", DiscordRequest::HTTPRequestMethod_PATCH, $modify));
+    }
+
+    /**
+     * Returns a PNG image widget for the guild.
+     * Requires no permissions or authentication.
+     * @param string $style widget style options.
+     * 
+     * Available styles:
+     * * 'shield' example: https://discord.com/api/guilds/81384788765712384/widget.png?style=shield
+     * * 'banner1' example: https://discord.com/api/guilds/81384788765712384/widget.png?style=banner1
+     * * 'banner2' example: https://discord.com/api/guilds/81384788765712384/widget.png?style=banner2
+     * * 'banner3' example: https://discord.com/api/guilds/81384788765712384/widget.png?style=banner3
+     * * 'banner4' example: https://discord.com/api/guilds/81384788765712384/widget.png?style=banner4
+     * @return string widget url.
+     */
+    public function GetGuildWidgetImage(string $guild_id, string $style = "shield") : string
+    {
+        return $this->SendRequest("guilds/$guild_id/widget.png?style=$style", DiscordRequest::HTTPRequestMethod_GET);
+    }
+
+    /**
+     * Returns a partial invite object for guilds with that feature enabled.
+     * Requires the MANAGE_GUILD permission.
+     * code will be null if a vanity url for the guild is not set.
+     * @return DiscordInvite object.
+     */
+    public function GetGuildVanityURL(string $guild_id) : DiscordInvite
+    {
+        return new DiscordInvite($this->SendRequest("guilds/$guild_id/vanity-url", DiscordRequest::HTTPRequestMethod_GET));
+    }
+
+    /**
+     * Returns the Welcome Screen object for the guild.
+     * @return DiscordGuildWelcomeScreen for the guild.
+     */
+    public function GetGuildWelcomeScreen(string $guild_id) : DiscordGuildWelcomeScreen
+    {
+        return new DiscordGuildWelcomeScreen($this->SendRequest("guilds/$guild_id/welcome-screen", DiscordRequest::HTTPRequestMethod_GET));
+    }
+
+    /**
+     * Modify the guild's Welcome Screen.
+     * Requires the MANAGE_GUILD permission.
+     * Returns the updated Welcome Screen object.
+     * All parameters to this endpoint are optional and nullable.
+     * @param bool $enabled whether the welcome screen is enabled.
+     * @param array $welcome_channels array of welcome screen channel objects, channels linked in the welcome screen and their display options.
+     * @param string $description the server description to show in the welcome screen.
+     */
+    public function ModifyGuildWelcomeScreen(string $guild_id, bool $enabled, array $welcome_channels, string $description) : DiscordGuildWelcomeScreen
+    {
+        return new DiscordGuildWelcomeScreen($this->SendRequest("guilds/$guild_id/welcome-screen", DiscordRequest::HTTPRequestMethod_PATCH, [ "enabled" => $enabled, "welcome_channels" => $welcome_channels, "description" => $description ]));
+    }
+
+    /**
+     * Returns a list of invite objects (with invite metadata) for the guild.
+     * Requires the MANAGE_GUILD permission.
+     */
+    public function GetGuildInvites(string $guild_id) : array
+    {
+        $result = $this->SendRequest("guilds/$guild_id/invites", DiscordRequest::HTTPRequestMethod_GET);
+        foreach($result as $index => $value)
+        {
+            $result[$index] = new DiscordInvite($value);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns a list of integration objects for the guild.
+     * Requires the MANAGE_GUILD permission.
+     */
+    public function GetGuildIntegrations(string $guild_id) : array
+    {
+        $result = $this->SendRequest("guilds/$guild_id/integrations", DiscordRequest::HTTPRequestMethod_GET);
+        foreach($result as $index => $value)
+        {
+            $result[$index] = new DiscordIntegration($value);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Delete the attached integration object for the guild.
+     * Deletes any associated webhooks and kicks the associated bot if there is one. Requires the MANAGE_GUILD permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Integrations Update Gateway event.
+     */
+    public function DeleteGuildIntegration(string $guild_id, string $integration_id) : void
+    {
+        $this->SendRequest("guilds/$guild_id/integrations/$integration_id", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
+     * Returns a list of voice region objects for the guild.
+     * Unlike the similar /voice route, this returns VIP servers when the guild is VIP-enabled.
+     */
+    public function GetGuildVoiceRegions(string $guild_id) : array
+    {
+        $result = $this->SendRequest("guilds/$guild_id/regions", DiscordRequest::HTTPRequestMethod_GET);
+        foreach($result as $index => $value)
+        {
+            $result[$index] = new VoiceRegion($value);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Begin a prune operation.
+     * Requires the KICK_MEMBERS permission.
+     * Returns an object with one 'pruned' key indicating the number of members that were removed in the prune operation.
+     * For large guilds it's recommended to set the compute_prune_count option to false, forcing 'pruned' to null.
+     * Fires multiple Guild Member Remove Gateway events.
+     * By default, prune will not remove users with roles.
+     * You can optionally include specific roles in your prune by providing the include_roles parameter.
+     * Any inactive user that has a subset of the provided role(s) will be included in the prune and users with additional roles will not.
+     * @param int $days number of days to prune (1-30).
+     * @param bool $compute_prune_count whether 'pruned' is returned, discouraged for large guilds
+     * @param array $include_roles role id(s) to include
+     * @param null|string $reason reason for the prune (deprecated)
+     */
+    public function BeginGuildPrune(string $guild_id, int $days = 7, bool $compute_prune_count = true, array $include_roles = [], ?string $reason = null) : void
+    {
+        $this->SendRequest("guilds/$guild_id/prune", DiscordRequest::HTTPRequestMethod_POST, [ "days" => $days, "compute_prune_count" => $compute_prune_count, "include_roles" => $include_roles, "reason" => $reason ]);
+    }
+
+    /**
+     * Returns an object with one 'pruned' key indicating the number of members that would be removed in a prune operation.
+     * Requires the KICK_MEMBERS permission.
+     * By default, prune will not remove users with roles.
+     * You can optionally include specific roles in your prune by providing the include_roles parameter.
+     * Any inactive user that has a subset of the provided role(s) will be counted in the prune and users with additional roles will not.
+     */
+    public function GetGuildPruneCount(string $guild_id) : int
+    {
+        return $this->SendRequest("guilds/$guild_id/prune", DiscordRequest::HTTPRequestMethod_GET)["pruned"];
+    }
+
+    /**
+     * Delete a guild role.
+     * Requires the MANAGE_ROLES permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Role Delete Gateway event.
+     */
+    public function DeleteGuildRole(string $guild_id, string $role_id) : void
+    {
+        $this->SendRequest("guilds/$guild_id/roles/$role_id", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
+     * Modify a guild role.
+     * Requires the MANAGE_ROLES permission.
+     * Returns the updated role on success.
+     * Fires a Guild Role Update Gateway event.
+     * @return DiscordRole updated role object on success.
+     */
+    public function ModifyGuildRole(string $guild_id, string $role_id, ModifyDiscordRole $modify) : DiscordRole
+    {
+        return new DiscordRole($this->SendRequest("guilds/$guild_id/roles/$role_id", DiscordRequest::HTTPRequestMethod_PATCH, $modify));
+    }
+
+    /**
+     * Modify the positions of a set of role objects for the guild.
+     * Requires the MANAGE_ROLES permission.
+     * Returns a list of all of the guild's role objects on success.
+     * Fires multiple Guild Role Update Gateway events.
+     */
+    public function ModifyGuildRolePositions(string $guild_id, string $role_id, ?int $position) : array
+    {
+        $result = $this->SendRequest("guilds/$guild_id/roles", DiscordRequest::HTTPRequestMethod_PATCH, [ "role_id" => $role_id, "position" => $position ]);
+        foreach($result as $index => $value)
+        {
+            $result[$index] = new DiscordRole($value);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Create a new role for the guild.
+     * Requires the MANAGE_ROLES permission.
+     * Returns the new role object on success.
+     * Fires a Guild Role Create Gateway event.
+     * All JSON params are optional.
+     */
+    public function CreateGuildRole(string $guild_id, CreateDiscordRole $create) : DiscordRole
+    {
+        return new DiscordRole($this->SendRequest("guilds/$guild_id/roles", DiscordRequest::HTTPRequestMethod_POST, $create));
+    }
+
+    /**
+     * Create a new channel object for the guild.
+     * Requires the MANAGE_CHANNELS permission.
+     * If setting permission overwrites, only permissions your bot has in the guild can be allowed/denied.
+     * Setting MANAGE_ROLES permission in channels is only possible for guild administrators.
+     * Returns the new channel object on success.
+     * Fires a Channel Create Gateway event.
+     */
+    public function CreateGuildChannel(string $guild_id, CreateDiscordChannel $create) : DiscordChannel
+    {
+        return new DiscordChannel($this->SendRequest("guilds/$guild_id/channels", DiscordRequest::HTTPRequestMethod_POST, $create));
+    }
+
+    /**
+     * Modify the positions of a set of channel objects for the guild.
+     * Requires MANAGE_CHANNELS permission.
+     * Returns a 204 empty response on success.
+     * Fires multiple Channel Update Gateway events.
+     * @param null|string $channel_id channel id
+     * @param null|int $position sorting position of the channel
+     * @param null|bool $lock_permissions syncs the permission overwrites with the new parent, if moving to a new category
+     * @param null|string $parent_id the new parent ID for the channel that is moved
+     */
+    public function ModifyGuildChannelPositions(string $guild_id, string $channel_id, ?int $position = null, ?bool $lock_permissions = null, ?string $parent_id) : void
+    {
+        $this->SendRequest("guilds/$guild_id/channels", DiscordRequest::HTTPRequestMethod_PATCH, [ "channel_id" => $channel_id, "position"=> $position, "lock_permissions"=> $lock_permissions, "parent_id"=> $parent_id ]);
+    }
+
+    /**
+     * Adds a user to the guild, provided you have a valid oauth2 access token for the user with the guilds.join scope.
+     * Returns a 201 Created with the guild member as the body, or 204 No Content if the user is already a member of the guild.
+     * Fires a Guild Member Add Gateway event.
+     * For guilds with Membership Screening enabled, this endpoint will default to adding new members as pending in the guild member object.
+     * Members that are pending will have to complete membership screening before they become full members that can talk.
+     * @return null|DiscordGuildMember null if already member, otherwise DiscordGuildMember object.
+     */
+    public function AddGuildMember(string $guild_id, string $user_id, string $access_token, ModifyDiscordGuildMember $modify) : mixed
+    {
+        $result = $this->SendRequest("guilds/$guild_id/members/$user_id", DiscordRequest::HTTPRequestMethod_PUT, [ "access_token" => $access_token, $modify ]);
+
+        //No content if already member
+        if(strlen(json_encode($result)) < 40)
+            return null;
+        
+        return new DiscordGuildMember($result);
     }
 
     /**
