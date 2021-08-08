@@ -7,5 +7,5 @@ $bot = new DiscordBot($TOKEN);
 
 $guildid = "801193764487561247";
 $guild = $bot->GetGuild($guildid);
-var_dump($guild);
+echo '<pre>'; var_dump($guild); echo '</pre>';
 ?>
