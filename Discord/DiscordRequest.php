@@ -124,8 +124,7 @@ class DiscordRequest
 
             if(isset($this->jsonBody) && !empty($this->jsonBody))
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $this->jsonBody);
-
-            if(isset($this->postfields) && !empty($this->postfields))
+            else if(isset($this->postfields) && !empty($this->postfields))
                 curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($this->postfields));
             
             $response = curl_exec($curl);
