@@ -171,7 +171,7 @@ class DiscordBot
      */
     public function AddMemberRole(string $guild_id, string $user_id, string $role_id) : void
     {
-        $this->SendRequest("guilds/$guild_id/members/$user_id/roles/$role_id", DiscordRequest::HTTPRequestMethod_PUT);
+        $this->SendRequest("guilds/$guild_id/members/$user_id/roles/$role_id", DiscordRequest::HTTPRequestMethod_PUT, "");
     }
 
     /**
