@@ -46,14 +46,26 @@ abstract class DiscordObjectParser
 						foreach($this->{$property} as $propertyindex => $propertyvalue)
 						{
 							if(isset($propertyvalue))
+							{
+								if(is_object($propertyvalue))
+								{
+									$propertyvalue = get_object_vars($propertyvalue);
+								}
+								
 								$this->{$property}[$propertyindex] = new $className($propertyvalue);
+							}
 						}
 					} else {
-						$this->{$property} = new $className($this->{$property});
+						if(isset($this->{$property}))
+						{
+							if(!is_array($this->{$property}))
+								$this->{$property} = get_object_vars($this->{$property});
+
+							$this->{$property} = new $className($this->{$property});
+						}
 					}
 				}
 			}
 		}
     }
 }
-?>

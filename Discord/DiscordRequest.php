@@ -1,7 +1,7 @@
 <?php
 namespace Nexd\Discord;
 
-require __DIR__ . "/Exceptions/DiscordInvalidResponseException.php";
+require_once __DIR__ . "/Exceptions/DiscordInvalidResponseException.php";
 use Nexd\Discord\Exceptions\DiscordInvalidResponseException;
 
 class HTTPResponseCode

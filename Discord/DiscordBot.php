@@ -437,13 +437,14 @@ class DiscordBot
      * Fires a Message Create Gateway event.
      * See message formatting for more information on how to properly format messages.
      * 
-     * For limitations, check: https://discord.com/developers/docs/resources/channel#create-message-limitations.
+     * For limitations, check: https://discord.com/developers/docs/resources/channel#create-message-limitations
      * 
-     * For parameters, check: https://discord.com/developers/docs/resources/channel#create-message-jsonform-params.
+     * For parameters, check: https://discord.com/developers/docs/resources/channel#create-message-jsonform-params
+     * @return DiscordMessage object.
      */
-    public function SendMessage(string $id, DiscordMessage $message) : DiscordMessage
+    public function SendMessage(string $channel_id, DiscordMessage $message) : DiscordMessage
     {
-        return new DiscordMessage($this->SendRequest("channels/$id/messages", DiscordRequest::HTTPRequestMethod_POST, $message));
+        return new DiscordMessage($this->SendRequest("channels/$channel_id/messages", DiscordRequest::HTTPRequestMethod_POST, $message));
     }
 
     /**

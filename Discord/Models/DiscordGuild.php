@@ -331,7 +331,7 @@ class ModifyDiscordGuild
 	public ?string $description;
 }
 
-class DiscordGuildStickerType
+class DiscordStickerType
 {
 	/**
 	 * an official sticker in a pack, part of Nitro or in a removed purchasable pack
@@ -344,7 +344,7 @@ class DiscordGuildStickerType
 	public const GUILD = 2;
 }
 
-class DiscordGuildStickerFormat
+class DiscordStickerFormat
 {
 	public const PNG = 1;
 
