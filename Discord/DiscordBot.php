@@ -841,6 +841,146 @@ class DiscordBot
     }
 
     /**
+     * Crosspost a message in a News Channel to following channels.
+     * This endpoint requires the 'SEND_MESSAGES' permission, if the current user sent the message,
+     * or additionally the 'MANAGE_MESSAGES' permission, for all other messages, to be present for the current user.
+     * Returns a message object.
+     */
+    public function CrosspostMessage(string $channel_id, string $message_id) : DiscordMessage
+    {
+        return new DiscordMessage($this->SendRequest("channels/$channel_id/messages/$message_id/crosspost", DiscordRequest::HTTPRequestMethod_POST));
+    }
+
+    /**
+     * Create a reaction for the message. This endpoint requires the 'READ_MESSAGE_HISTORY' permission to be present on the current user.
+     * Additionally, if nobody else has reacted to the message using this emoji, this endpoint requires the 'ADD_REACTIONS' permission to be present on the current user.
+     * Returns a 204 empty response on success.
+     * 
+     * The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
+     * To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
+     */
+    public function CreateReaction(string $channel_id, string $message_id, string $emoji) : void
+    {
+        $this->SendRequest("channels/$channel_id/messages/$message_id/reactions/$emoji/@me", DiscordRequest::HTTPRequestMethod_PUT, "");
+    }
+
+    /**
+     * Delete a reaction the current user has made for the message.
+     * Returns a 204 empty response on success.
+     * 
+     * The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
+     * To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
+     */
+    public function DeleteOwnReaction(string $channel_id, string $message_id, string $emoji) : void
+    {
+        $this->SendRequest("channels/$channel_id/messages/$message_id/reactions/$emoji/@me", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
+     * Deletes another user's reaction.
+     * This endpoint requires the 'MANAGE_MESSAGES' permission to be present on the current user.
+     * Returns a 204 empty response on success.
+     * 
+     * The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
+     * To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
+     */
+    public function DeleteUserReaction(string $channel_id, string $message_id, string $user_id, string $emoji) : void
+    {
+        $this->SendRequest("channels/$channel_id/messages/$message_id/reactions/$emoji/$user_id", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
+     * Get a list of users that reacted with this emoji.
+     * Returns an array of user objects on success.
+     * 
+     * The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
+     * To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
+     */
+    public function GetReactions(string $channel_id, string $message_id, string $emoji, ?string $after, ?int $limit = 25) : array
+    {
+        if(isset($limit))
+        {
+            if($limit < 1)
+                $limit = 1;
+            else if($limit > 100)
+                $limit = 100;
+        }
+
+        $query = "";
+        if(isset($after))
+        {
+            $query = "after=$after";
+        }
+        
+        $result = $this->SendRequest("channels/$channel_id/messages/$message_id/reactions/$emoji?limit=$limit&$query", DiscordRequest::HTTPRequestMethod_GET);
+        foreach($result as $index => $value)
+        {
+            $result[$index] = new DiscordUser($value);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Deletes all reactions on a message.
+     * This endpoint requires the 'MANAGE_MESSAGES' permission to be present on the current user.
+     * Fires a Message Reaction Remove All Gateway event.
+     */
+    public function DeleteAllReactions(string $channel_id, string $message_id) : void
+    {
+        $this->SendRequest("channels/$channel_id/messages/$message_id/reactions", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
+     * Deletes all the reactions for a given emoji on a message.
+     * This endpoint requires the MANAGE_MESSAGES permission to be present on the current user.
+     * Fires a Message Reaction Remove Emoji Gateway event.
+     * 
+     * The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
+     * To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
+     */
+    public function DeleteAllReactionsEmoji(string $channel_id, string $message_id, string $emoji) : void
+    {
+        $this->SendRequest("channels/$channel_id/messages/$message_id/reactions/$emoji", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
+     * Pin a message in a channel.
+     * Requires the MANAGE_MESSAGES permission.
+     * Returns a 204 empty response on success.
+     */
+    public function PinMessage(string $channel_id, string $message_id) : void
+    {
+        $this->SendRequest("channels/$channel_id/pins/$message_id", DiscordRequest::HTTPRequestMethod_PUT, "");
+    }
+
+    /**
+     * Unpin a message in a channel.
+     * Requires the MANAGE_MESSAGES permission.
+     * Returns a 204 empty response on success.
+     */
+    public function UnpinMessage(string $channel_id, string $message_id) : void
+    {
+        $this->SendRequest("channels/$channel_id/pins/$message_id", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
+     * Adds a recipient to a Group DM using their access token.
+     */
+    public function AddGroupDMRecipient(string $channel_id, string $user_id, string $access_token, string $nickname) : void
+    {
+        $this->SendRequest("channels/$channel_id/recipients/$user_id", DiscordRequest::HTTPRequestMethod_PUT, [ "access_token" => $access_token, "nick" => $nickname ]);
+    }
+
+    /**
+     * Removes a recipient from a Group DM.
+     */
+    public function RemoveGroupDMRecipient(string $channel_id, string $user_id) : void
+    {
+        $this->SendRequest("channels/$channel_id/recipients/$user_id", DiscordRequest::HTTPRequestMethod_DELETE);
+    }
+
+    /**
      * Send request to the Discord API.
      * @param string $route API route.
      * @param string $method HTTP Request method.
