@@ -982,7 +982,7 @@ class DiscordBot
 
     public function TriggerTypingIndicator(string $channel_id) : void
     {
-        $this->SendRequest("channels/$channel_id/typing", DiscordRequest::HTTPRequestMethod_POST);
+        $this->SendRequest("channels/$channel_id/typing", DiscordRequest::HTTPRequestMethod_POST, "");
     }
 
     /**
