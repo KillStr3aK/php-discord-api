@@ -1,8 +1,7 @@
 <?php
+
 namespace Nexd\Discord;
 
-use Nexd\Discord\DiscordRequest;
-use Nexd\Discord\DiscordEmbed;
 use Nexd\Discord\Exceptions\DiscordEmbedLimitException;
 
 class DiscordWebhook
@@ -21,40 +20,42 @@ class DiscordWebhook
         $this->url = $url;
     }
 
-    public function WithUsername(string $username) : self
+    public function WithUsername(string $username): self
     {
         $this->username = $username;
+
         return $this;
     }
 
-    public function WithAvatar(string $avatarurl) : self
+    public function WithAvatar(string $avatarurl): self
     {
         $this->avatarurl = $avatarurl;
+
         return $this;
     }
 
-    public function SetTTS(bool $tts) : self
+    public function SetTTS(bool $tts): self
     {
         $this->tts = $tts;
+
         return $this;
     }
 
-    public function AddEmbed(DiscordEmbed $embed) : self
+    public function AddEmbed(DiscordEmbed $embed): self
     {
-        if(count($this->embeds) < self::MAX_EMBEDS)
-        {
+        if (count($this->embeds) < self::MAX_EMBEDS) {
             array_push($this->embeds, $embed);
+
             return $this;
         }
 
-        throw new DiscordEmbedLimitException("DiscordWebhook cannot have more than " . self::MAX_EMBEDS . " embeds.");
+        throw new DiscordEmbedLimitException('DiscordWebhook cannot have more than '.self::MAX_EMBEDS.' embeds.');
     }
 
-    public function Send() : void
+    public function Send(): void
     {
         $request = new DiscordRequest($this->url, DiscordRequest::HTTPRequestMethod_POST);
         $request->SetJsonBody($this);
         $request->Send();
     }
 }
-?>

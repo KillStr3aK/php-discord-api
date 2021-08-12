@@ -1,8 +1,8 @@
 <?php
+
 namespace Nexd\Discord;
 
 use Exception;
-use Nexd\Discord\DiscordEmbed;
 use Nexd\Discord\Exceptions\DiscordEmbedLimitException;
 
 class MessageType
@@ -22,7 +22,7 @@ class MessageType
     public const CHANNEL_PINNED_MESSAGE = 6;
 
     public const GUILD_MEMBER_JOIN = 7;
-    
+
     public const USER_PREMIUM_GUILD_SUBSCRIPTION = 8;
 
     public const USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1 = 9;
@@ -42,7 +42,7 @@ class MessageType
     public const GUILD_DISCOVERY_GRACE_PERIOD_FINAL_WARNING = 17;
 
     public const THREAD_CREATED = 18;
-    
+
     public const REPLY = 9;
 
     public const APPLICATION_COMMAND = 20;
@@ -85,22 +85,22 @@ class MessageFlags
 class DiscordMessageReference
 {
     /**
-     * 	id of the originating message
+     * 	id of the originating message.
      */
     public string $message_id;
 
     /**
-     * 	id of the originating message's channel
+     * 	id of the originating message's channel.
      */
     public string $channel_id;
 
     /**
-     * 	id of the originating message's guild
+     * 	id of the originating message's guild.
      */
     public string $guild_id;
 
     /**
-     * 	when sending, whether to error if the referenced message doesn't exist instead of sending as a normal (non-reply) message, default true
+     * 	when sending, whether to error if the referenced message doesn't exist instead of sending as a normal (non-reply) message, default true.
      */
     public bool $fail_if_not_exists;
 }
@@ -110,52 +110,52 @@ class DiscordMessageReference
  * * https://discord.com/developers/docs/resources/channel#allowed-mentions-object
  * * https://discord.com/developers/docs/resources/channel#embed-object
  * * https://discord.com/developers/docs/resources/channel#attachment-object
- * * https://discord.com/developers/docs/interactions/message-components#component-object
+ * * https://discord.com/developers/docs/interactions/message-components#component-object.
  */
 class ModifyDiscordMessage
 {
     /**
-     * the message contents (up to 2000 characters)
+     * the message contents (up to 2000 characters).
      */
     public string $content;
 
     /**
-     * embedded rich content (up to 6000 characters)
+     * embedded rich content (up to 6000 characters).
      */
     public array $embeds;
 
     /**
-     * (deprecated) embedded rich content, deprecated in favor of embeds
+     * (deprecated) embedded rich content, deprecated in favor of embeds.
      */
     public $embed;
 
     /**
-     * edit the flags of a message (only SUPPRESS_EMBEDS can currently be set/unset)
+     * edit the flags of a message (only SUPPRESS_EMBEDS can currently be set/unset).
      */
     public int $flags;
 
     /**
-     * the contents of the file being sent/edited
+     * the contents of the file being sent/edited.
      */
     public $file;
 
     /**
-     * 	JSON encoded body of non-file params (multipart/form-data only)
+     * 	JSON encoded body of non-file params (multipart/form-data only).
      */
     public string $payload_json;
 
     /**
-     * allowed mentions for the message
+     * allowed mentions for the message.
      */
     public $allowed_mentions;
 
     /**
-     * 	attached files to keep
+     * 	attached files to keep.
      */
     public $attachments;
 
     /**
-     * 	the components to include with the message
+     * 	the components to include with the message.
      */
     public $components;
 }
@@ -165,210 +165,211 @@ class DiscordMessage extends DiscordObjectParser
     private const MAX_EMBEDS = 10;
 
     private const InitializeProperties =
-	[	/*Property Name */			/* to */
-		"author"	        => "DiscordUser",
-		"member"            => "DiscordGuildMember",
-        "stickers"          => "DiscordSticker[]",
-        "sticker_items"     => "DiscordStickerItem[]",
-        "thread"            => "DiscordChannel",
-        "application"       => "DiscordApplication",
-        "embeds"            => "DiscordEmbed[]"
-	];
+    [/*Property Name */			/* to */
+        'author'	           => 'DiscordUser',
+        'member'            => 'DiscordGuildMember',
+        'stickers'          => 'DiscordSticker[]',
+        'sticker_items'     => 'DiscordStickerItem[]',
+        'thread'            => 'DiscordChannel',
+        'application'       => 'DiscordApplication',
+        'embeds'            => 'DiscordEmbed[]',
+    ];
 
-	public function __construct()
-	{
-        if(func_num_args() == 0)
-            throw new Exception("Cannot create an empty DiscordMessage");
-
-        switch(gettype(func_get_arg(0)))
-        {
-            case "string": $function = "__constructNew"; break;
-            default: $function = "__constructFromData";
+    public function __construct()
+    {
+        if (func_num_args() == 0) {
+            throw new Exception('Cannot create an empty DiscordMessage');
         }
 
-        call_user_func_array(array($this, $function), func_get_args());
-	}
+        switch (gettype(func_get_arg(0))) {
+            case 'string': $function = '__constructNew'; break;
+            default: $function = '__constructFromData';
+        }
+
+        call_user_func_array([$this, $function], func_get_args());
+    }
 
     public function __constructFromData($msg)
-	{
-        parent::__construct((array)$msg, self::InitializeProperties);
-	}
+    {
+        parent::__construct((array) $msg, self::InitializeProperties);
+    }
 
     public function __constructNew(string $content, ?array $embeds = null)
-	{
+    {
         $this->content = $content;
 
-        if(isset($embeds))
+        if (isset($embeds)) {
             $this->embeds = $embeds;
-	}
+        }
+    }
 
-    public function AddEmbed(DiscordEmbed $embed) : self
+    public function AddEmbed(DiscordEmbed $embed): self
     {
-        if($this->embeds == null)
+        if ($this->embeds == null) {
             $this->embeds = [];
-            
-        if(count($this->embeds) < self::MAX_EMBEDS)
-        {
+        }
+
+        if (count($this->embeds) < self::MAX_EMBEDS) {
             array_push($this->embeds, $embed);
+
             return $this;
         }
 
-        throw new DiscordEmbedLimitException("DiscordMessage cannot have more than " . self::MAX_EMBEDS . " embeds.");
+        throw new DiscordEmbedLimitException('DiscordMessage cannot have more than '.self::MAX_EMBEDS.' embeds.');
     }
 
     /**
-     * 	id of the message
+     * 	id of the message.
      */
     public string $id;
 
     /**
-     * 	id of the channel the message was sent in
+     * 	id of the channel the message was sent in.
      */
     public string $channel_id;
 
     /**
-     * 	id of the guild the message was sent in
+     * 	id of the guild the message was sent in.
      */
     public string $guild_id;
 
     /**
-     * 	the author of this message (not guaranteed to be a valid user, see below)
+     * 	the author of this message (not guaranteed to be a valid user, see below).
      */
     public $author;
 
     /**
-     * member properties for this message's author
+     * member properties for this message's author.
      */
     public $member;
 
     /**
-     * 	contents of the message
+     * 	contents of the message.
      */
     public ?string $content;
 
     /**
-     * 	when this message was sent
+     * 	when this message was sent.
      */
     public ?string $timestamp;
 
     /**
-     * 	when this message was edited (or null if never)
+     * 	when this message was edited (or null if never).
      */
     public ?string $edited_timestamp;
 
     /**
-     * 	whether this was a TTS message
+     * 	whether this was a TTS message.
      */
     public bool $tts;
 
     /**
-     * 	whether this message mentions everyone
+     * 	whether this message mentions everyone.
      */
     public bool $mention_everyone;
 
     /**
-     * users specifically mentioned in the message
+     * users specifically mentioned in the message.
      */
     public ?array $mentions = null;
 
     /**
-     * 	roles specifically mentioned in this message
+     * 	roles specifically mentioned in this message.
      */
     public ?array $mention_roles = null;
 
     /**
-     * channels specifically mentioned in this message
+     * channels specifically mentioned in this message.
      */
     public ?array $mention_channels = null;
 
     /**
-     * 	any attached files
+     * 	any attached files.
      */
     public ?array $attachments = null;
 
     /**
-     * 	any embedded content
+     * 	any embedded content.
      */
     public ?array $embeds = null;
 
     /**
-     * 	reactions to the message
+     * 	reactions to the message.
      */
     public ?array $reactions = null;
 
     /**
-     * used for validating a message was sent
+     * used for validating a message was sent.
      */
     public $nonce;
 
     /**
-     * whether this message is pinned
+     * whether this message is pinned.
      */
     public bool $pinned;
 
     /**
-     * if the message is generated by a webhook, this is the webhook's id
+     * if the message is generated by a webhook, this is the webhook's id.
      */
     public string $webhook_id;
 
     /**
-     * 	type of message
+     * 	type of message.
      */
     public int $type;
 
     /**
-     * sent with Rich Presence-related chat embeds
+     * sent with Rich Presence-related chat embeds.
      */
     public $activity;
 
     /**
-     * 	sent with Rich Presence-related chat embeds
+     * 	sent with Rich Presence-related chat embeds.
      */
     public $application;
 
     /**
-     * 	if the message is a response to an Interaction, this is the id of the interaction's application
+     * 	if the message is a response to an Interaction, this is the id of the interaction's application.
      */
     public string $application_id;
 
     /**
-     * data showing the source of a crosspost, channel follow add, pin, or reply message
+     * data showing the source of a crosspost, channel follow add, pin, or reply message.
      */
     public $message_reference;
 
     /**
-     * message flags combined as a bitfield
+     * message flags combined as a bitfield.
      */
     public int $flags;
 
     /**
-     * the message associated with the message_reference
+     * the message associated with the message_reference.
      */
     public $referenced_message;
 
     /**
-     * sent if the message is a response to an Interaction
+     * sent if the message is a response to an Interaction.
      */
     public $interaction;
 
     /**
-     * 	the thread that was started from this message, includes thread member object
+     * 	the thread that was started from this message, includes thread member object.
      */
     public $thread;
 
     /**
-     * sent if the message contains components like buttons, action rows, or other interactive components
+     * sent if the message contains components like buttons, action rows, or other interactive components.
      */
     public ?array $components = null;
 
     /**
-     * sent if the message contains stickers
+     * sent if the message contains stickers.
      */
     public ?array $sticker_items = null;
 
     /**
-     * (deprecated) the stickers sent with the message
+     * (deprecated) the stickers sent with the message.
      */
     public ?array $stickers = null;
 }
-?>
