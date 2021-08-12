@@ -980,6 +980,11 @@ class DiscordBot
         $this->SendRequest("channels/$channel_id/recipients/$user_id", DiscordRequest::HTTPRequestMethod_DELETE);
     }
 
+    public function TriggerTypingIndicator(string $channel_id) : void
+    {
+        $this->SendRequest("channels/$channel_id/typing", DiscordRequest::HTTPRequestMethod_POST);
+    }
+
     /**
      * Send request to the Discord API.
      * @param string $route API route.
