@@ -1,4 +1,5 @@
 <?php
+
 namespace Nexd\Discord;
 
 class UserFlags
@@ -44,12 +45,12 @@ class PremiumTypes
 class ConnectionVisibilityType
 {
     /**
-     * 	invisible to everyone except the user themselves
+     * 	invisible to everyone except the user themselves.
      */
     public const None = 0;
 
     /**
-     * visible to everyone
+     * visible to everyone.
      */
     public const Everyone = 1;
 }
@@ -57,68 +58,67 @@ class ConnectionVisibilityType
 class DiscordUser extends DiscordObjectParser
 {
     /**
-     * the user's id
+     * the user's id.
      */
     public string $id;
 
     /**
-     * the user's username, not unique across the platform
+     * the user's username, not unique across the platform.
      */
     public string $username;
 
     /**
-     * the user's 4-digit discord-tag
+     * the user's 4-digit discord-tag.
      */
     public string $discriminator;
 
     /**
-     * the user's avatar hash
+     * the user's avatar hash.
      */
     public ?string $avatar;
 
     /**
-     * whether the user belongs to an OAuth2 application
+     * whether the user belongs to an OAuth2 application.
      */
     public ?bool $bot = null;
 
     /**
-     * whether the user is an Official Discord System user (part of the urgent message system)
+     * whether the user is an Official Discord System user (part of the urgent message system).
      */
     public ?bool $system = null;
 
     /**
-     * 	whether the user has two factor enabled on their account
+     * 	whether the user has two factor enabled on their account.
      */
     public ?bool $mfa_enabled = null;
 
     /**
-     * the user's chosen language option
+     * the user's chosen language option.
      */
     public ?string $locale = null;
 
     /**
-     * whether the email on this account has been verified
+     * whether the email on this account has been verified.
      */
     public ?bool $verified = null;
 
     /**
-     * the user's email
+     * the user's email.
      */
     public ?string $email = null;
 
     /**
-     * the flags on a user's account
+     * the flags on a user's account.
      */
     public ?int $flags = null;
 
     /**
-     * the type of Nitro subscription on a user's account
+     * the type of Nitro subscription on a user's account.
      */
     public ?int $premium_type = null;
 
     /**
-     * the public flags on a user's account
+     * the public flags on a user's account.
      */
     public int $public_flags;
 }
-?>
