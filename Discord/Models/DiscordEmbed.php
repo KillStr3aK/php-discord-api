@@ -16,22 +16,22 @@ class DiscordEmbedBuilder
 {
     private const MAX_EMBED_FIELDS = 25;
 
-    private ?DiscordEmbedAuthor $author = null;
-    private ?DiscordEmbedFooter $footer = null;
-    private ?DiscordEmbedImage $image = null;
-    private ?DiscordEmbedVideo $video = null;
-    private ?DiscordEmbedThumbnail $thumbnail = null;
-    private ?DiscordEmbedProvider $provider = null;
+    private ?DiscordEmbedAuthor $author;
+    private ?DiscordEmbedFooter $footer;
+    private ?DiscordEmbedImage $image;
+    private ?DiscordEmbedVideo $video;
+    private ?DiscordEmbedThumbnail $thumbnail;
+    private ?DiscordEmbedProvider $provider;
     private array $fields = [];
 
-    private ?string $title = null;
-    private ?\DateTimeInterface $timestamp = null;
-    private ?string $type = null;
-    private ?string $description = null;
-    private ?string $url = null;
-    private ?int $color = null;
+    private ?string $title;
+    private ?\DateTimeInterface $timestamp;
+    private ?string $type = "rich";
+    private ?string $description;
+    private ?string $url;
+    private ?int $color;
 
-    public ?DiscordEmbed $embed = null;
+    public ?DiscordEmbed $embed;
 
     public function __construct(?DiscordEmbed $embed = null)
     {
@@ -135,21 +135,16 @@ class DiscordEmbedBuilder
 
     public function Build(): DiscordEmbed
     {
-        return new DiscordEmbed([
-            'author'     => $this->author,
-            'footer'     => $this->footer,
-            'image'      => $this->image,
-            'video'      => $this->video,
-            'thumbnail'  => $this->thumbnail,
-            'provider'   => $this->provider,
-            'fields'     => $this->fields,
-            'title'      => $this->title,
-            'type'       => $this->type,
-            'description'=> $this->description,
-            'url'        => $this->url,
-            'color'      => $this->color,
-            'timestamp'  => $this->timestamp,
-        ]);
+        $data = [];
+        foreach($this as $property => $value)
+        {
+            if(isset($this->{$property}))
+            {
+                $data[$property] = $value;
+            }
+        }
+
+        return new DiscordEmbed($data);
     }
 }
 
@@ -180,65 +175,65 @@ class DiscordEmbed extends DiscordObjectParser implements \IteratorAggregate
     /**
      * title of embed.
      */
-    public ?string $title = null;
+    public ?string $title;
 
     /**
      * 	type of embed (always "rich" for webhook embeds).
      */
-    public ?string $type = null;
+    public ?string $type;
 
     /**
      * description of embed.
      */
-    public ?string $description = null;
+    public ?string $description;
 
     /**
      * url of embed.
      */
-    public ?string $url = null;
+    public ?string $url;
 
     /**
      * timestamp of embed content.
      */
-    public ?\DateTimeInterface $timestamp = null;
+    public ?\DateTimeInterface $timestamp;
 
     /**
      * 	color code of the embed.
      */
-    public ?int $color = null;
+    public ?int $color;
 
     /**
      * 	author information.
      */
-    public $author = null;
+    public $author;
 
     /**
      * 	footer information.
      */
-    public $footer = null;
+    public $footer;
 
     /**
      * 	image information.
      */
-    public $image = null;
+    public $image;
 
     /**
      * video information.
      */
-    public $video = null;
+    public $video;
 
     /**
      * 	thumbnail information.
      */
-    public $thumbnail = null;
+    public $thumbnail;
 
     /**
      * 	provider information.
      */
-    public $provider = null;
+    public $provider;
 
     /**
      * fields information.
      */
-    public ?array $fields = null;
+    public ?array $fields;
 }

@@ -7,15 +7,15 @@ class DiscordEmbedField extends DiscordObjectParser
     /**
      * name of the field.
      */
-    public ?string $name = null;
+    public ?string $name;
 
     /**
      * value of the field.
      */
-    public ?string $value = null;
+    public ?string $value;
 
     /**
      * 	whether or not this field should display inline.
      */
-    public ?bool $inline = null;
+    public ?bool $inline;
 }

@@ -7,20 +7,20 @@ class DiscordEmbedAuthor extends DiscordObjectParser
     /**
      * name of author.
      */
-    public ?string $name = null;
+    public ?string $name;
 
     /**
      * url of author.
      */
-    public ?string $url = null;
+    public ?string $url;
 
     /**
      * url of author icon (only supports http(s) and attachments).
      */
-    public ?string $icon_url = null;
+    public ?string $icon_url;
 
     /**
      * a proxied url of author icon.
      */
-    public ?string $proxy_icon_url = null;
+    public ?string $proxy_icon_url;
 }

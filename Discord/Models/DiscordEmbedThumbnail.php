@@ -7,20 +7,20 @@ class DiscordEmbedThumbnail extends DiscordObjectParser
     /**
      * source url of thumbnail (only supports http(s) and attachments).
      */
-    public ?string $url = null;
+    public ?string $url;
 
     /**
      * a proxied url of the thumbnail.
      */
-    public ?string $proxy_url = null;
+    public ?string $proxy_url;
 
     /**
      * height of thumbnail.
      */
-    public ?int $height = null;
+    public ?int $height;
 
     /**
      * width of thumbnail.
      */
-    public ?int $width = null;
+    public ?int $width;
 }

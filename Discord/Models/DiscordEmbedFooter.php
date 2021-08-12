@@ -7,15 +7,15 @@ class DiscordEmbedFooter extends DiscordObjectParser
     /**
      * footer text.
      */
-    public ?string $text = null;
+    public ?string $text;
 
     /**
      * url of footer icon (only supports http(s) and attachments).
      */
-    public ?string $icon_url = null;
+    public ?string $icon_url;
 
     /**
      * a proxied url of footer icon.
      */
-    public ?string $proxy_icon_url = null;
+    public ?string $proxy_icon_url;
 }

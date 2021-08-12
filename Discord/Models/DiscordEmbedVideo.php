@@ -7,20 +7,20 @@ class DiscordEmbedVideo extends DiscordObjectParser
     /**
      * source url of video.
      */
-    public ?string $url = null;
+    public ?string $url;
 
     /**
      * a proxied url of the video.
      */
-    public ?string $proxy_url = null;
+    public ?string $proxy_url;
 
     /**
      * height of video.
      */
-    public ?int $height = null;
+    public ?int $height;
 
     /**
      * 	width of video.
      */
-    public ?int $width = null;
+    public ?int $width;
 }
