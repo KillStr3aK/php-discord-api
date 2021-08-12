@@ -189,7 +189,7 @@ class DiscordMessage extends DiscordObjectParser
         call_user_func_array(array($this, $function), func_get_args());
 	}
 
-    public function __constructFromData(DiscordMessage|array $msg)
+    public function __constructFromData($msg)
 	{
         parent::__construct((array)$msg, self::InitializeProperties);
 	}

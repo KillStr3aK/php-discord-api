@@ -30,15 +30,11 @@ class DiscordEmbedBuilder
     private ?string $url = null;
     private ?int $color = null;
 
-    public function __construct(public ?DiscordEmbed $embed = null)
+    public ?DiscordEmbed $embed = null;
+
+    public function __construct(?DiscordEmbed $embed = null)
     {
-        if($embed != null)
-        {
-            foreach($embed as $key => $value)
-            {
-                $this->{$key} = $value;
-            }
-        }
+        $this->embed = $embed;
     }
 
     public function WithAuthor(?string $name = null, ?string $url = null, ?string $icon_url = null) : self
