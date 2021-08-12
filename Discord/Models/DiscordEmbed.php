@@ -26,7 +26,7 @@ class DiscordEmbedBuilder
 
     private ?string $title;
     private ?\DateTimeInterface $timestamp;
-    private ?string $type = "rich";
+    private ?string $type = 'rich';
     private ?string $description;
     private ?string $url;
     private ?int $color;
@@ -136,10 +136,8 @@ class DiscordEmbedBuilder
     public function Build(): DiscordEmbed
     {
         $data = [];
-        foreach($this as $property => $value)
-        {
-            if(isset($this->{$property}))
-            {
+        foreach ($this as $property => $value) {
+            if (isset($this->{$property})) {
                 $data[$property] = $value;
             }
         }
