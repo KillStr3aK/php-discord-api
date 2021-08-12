@@ -54,7 +54,7 @@ class DiscordWebhook
 
     public function Send(): void
     {
-        $request = new DiscordRequest($this->url, DiscordRequest::HTTPRequestMethod_POST);
+        $request = new DiscordRequest("webhooks/".$this->url, DiscordRequest::HTTPRequestMethod_POST);
         $request->SetJsonBody($this);
         $request->Send();
     }
