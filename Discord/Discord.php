@@ -48,3 +48,4 @@ require_once __DIR__.'/Models/DiscordMessage.php';
 require_once __DIR__.'/DiscordBot.php';
 require_once __DIR__.'/DiscordRequest.php';
 require_once __DIR__.'/DiscordOAuth.php';
+require_once __DIR__.'/DiscordWebhook.php';
