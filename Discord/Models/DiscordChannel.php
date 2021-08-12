@@ -1,73 +1,74 @@
 <?php
+
 namespace Nexd\Discord;
 
 class DiscordChannelType
 {
     /**
-     * a text channel within a server
+     * a text channel within a server.
      */
     public const GUILD_TEXT = 0;
 
     /**
-     * a direct message between users
+     * a direct message between users.
      */
     public const DM = 1;
 
     /**
-     * a voice channel within a server
+     * a voice channel within a server.
      */
     public const GUILD_VOICE = 2;
 
     /**
-     * a direct message between multiple users
+     * a direct message between multiple users.
      */
     public const GROUP_DM = 3;
 
     /**
-     * 	an organizational category that contains up to 50 channels
+     * 	an organizational category that contains up to 50 channels.
      */
     public const GUILD_CATEGORY = 4;
 
     /**
-     * a channel that users can follow and crosspost into their own server
+     * a channel that users can follow and crosspost into their own server.
      */
     public const GUILD_NEWS = 5;
 
     /**
-     * a channel in which game developers can sell their game on Discord
+     * a channel in which game developers can sell their game on Discord.
      */
     public const GUILD_STORE = 6;
 
     /**
-     * 	a temporary sub-channel within a GUILD_NEWS channel
+     * 	a temporary sub-channel within a GUILD_NEWS channel.
      */
     public const GUILD_NEWS_THREAD = 10;
 
     /**
-     * a temporary sub-channel within a GUILD_TEXT channel
+     * a temporary sub-channel within a GUILD_TEXT channel.
      */
     public const GUILD_PUBLIC_THREAD = 11;
 
     /**
-     * a temporary sub-channel within a GUILD_TEXT channel that is only viewable by those invited and those with the MANAGE_THREADS permission
+     * a temporary sub-channel within a GUILD_TEXT channel that is only viewable by those invited and those with the MANAGE_THREADS permission.
      */
     public const GUILD_PRIVATE_THREAD = 12;
 
     /**
-     * a voice channel for hosting events with an audience
+     * a voice channel for hosting events with an audience.
      */
-    public const GUILD_STAGE_VOICE  = 13;
+    public const GUILD_STAGE_VOICE = 13;
 }
 
 class VideoQualityModes
 {
     /**
-     * Discord chooses the quality for optimal performance
+     * Discord chooses the quality for optimal performance.
      */
     public const AUTO = 1;
 
     /**
-     * 720p
+     * 720p.
      */
     public const FULL = 2;
 }
@@ -75,67 +76,67 @@ class VideoQualityModes
 class ModifyDiscordChannel
 {
     /**
-     * 1-100 character channel name
+     * 1-100 character channel name.
      */
     public string $name;
 
     /**
-     * 	the type of channel; only conversion between text and news is supported and only in guilds with the "NEWS" feature
+     * 	the type of channel; only conversion between text and news is supported and only in guilds with the "NEWS" feature.
      */
     public int $type;
 
     /**
-     * the position of the channel in the left-hand listing
+     * the position of the channel in the left-hand listing.
      */
     public ?int $position;
 
     /**
-     * 0-1024 character channel topic
+     * 0-1024 character channel topic.
      */
     public ?string $topic;
 
     /**
-     * whether the channel is nsfw
+     * whether the channel is nsfw.
      */
     public ?bool $nsfw;
 
     /**
-     * amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected
+     * amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected.
      */
     public ?int $rate_limit_per_user;
 
     /**
-     * the bitrate (in bits) of the voice channel; 8000 to 96000 (128000 for VIP servers)
+     * the bitrate (in bits) of the voice channel; 8000 to 96000 (128000 for VIP servers).
      */
     public ?int $bitrate;
 
     /**
-     * the user limit of the voice channel; 0 refers to no limit, 1 to 99 refers to a user limit
+     * the user limit of the voice channel; 0 refers to no limit, 1 to 99 refers to a user limit.
      */
     public ?int $user_limit;
 
     /**
-     * channel or category-specific permissions
+     * channel or category-specific permissions.
      */
     public ?array $permission_overwrites;
 
     /**
-     * 	id of the new parent category for a channel
+     * 	id of the new parent category for a channel.
      */
     public ?string $parent_id;
 
     /**
-     * channel voice region id, automatic when set to null
+     * channel voice region id, automatic when set to null.
      */
     public ?string $rtc_region;
 
     /**
-     * the camera video quality mode of the voice channel
+     * the camera video quality mode of the voice channel.
      */
     public ?int $video_quality_mode;
 
     /**
-     * the default duration for newly created threads in the channel, in minutes, to automatically archive the thread after recent activity
+     * the default duration for newly created threads in the channel, in minutes, to automatically archive the thread after recent activity.
      */
     public ?int $default_auto_archive_duration;
 }
@@ -143,52 +144,52 @@ class ModifyDiscordChannel
 class CreateDiscordChannel
 {
     /**
-     * 	channel name (1-100 characters)
+     * 	channel name (1-100 characters).
      */
     public string $name;
 
     /**
-     * the type of channel
+     * the type of channel.
      */
     public int $type;
 
     /**
-     * channel topic (0-1024 characters)
+     * channel topic (0-1024 characters).
      */
     public string $topic;
 
     /**
-     * the bitrate (in bits) of the voice channel (voice only)
+     * the bitrate (in bits) of the voice channel (voice only).
      */
     public int $bitrate;
 
     /**
-     * 	the user limit of the voice channel (voice only)
+     * 	the user limit of the voice channel (voice only).
      */
     public int $user_limit;
 
     /**
-     * amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected
+     * amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected.
      */
     public int $rate_limit_per_user;
 
     /**
-     * sorting position of the channel
+     * sorting position of the channel.
      */
     public int $position;
 
     /**
-     * the channel's permission overwrites
+     * the channel's permission overwrites.
      */
     public array $permission_overwrites;
 
     /**
-     * 	id of the parent category for a channel
+     * 	id of the parent category for a channel.
      */
     public string $parent_id;
 
     /**
-     * whether the channel is nsfw
+     * whether the channel is nsfw.
      */
     public bool $nsfw;
 }
@@ -196,98 +197,98 @@ class CreateDiscordChannel
 class DiscordChannel extends DiscordObjectParser
 {
     private const InitializeProperties =
-	[	/*Property Name */			/* to */
-		"thread_metadata"	=> "ThreadMetadata",
-		"member"            => "ThreadMember"
-	];
+    [/*Property Name */			/* to */
+        'thread_metadata'	  => 'ThreadMetadata',
+        'member'            => 'ThreadMember',
+    ];
 
-	public function __construct(array $properties = array())
-	{
-		parent::__construct($properties, self::InitializeProperties);
-	}
+    public function __construct(array $properties = [])
+    {
+        parent::__construct($properties, self::InitializeProperties);
+    }
 
     /**
-     * the id of this channel
+     * the id of this channel.
      */
     public string $id;
 
     /**
-     * the type of channel
+     * the type of channel.
      */
     public int $type;
 
     /**
-     * 	the id of the guild (may be missing for some channel objects received over gateway guild dispatches)
+     * 	the id of the guild (may be missing for some channel objects received over gateway guild dispatches).
      */
     public string $guild_id;
 
     /**
-     * sorting position of the channel
+     * sorting position of the channel.
      */
     public ?int $position = null;
 
     /**
-     * 	explicit permission overwrites for members and roles
+     * 	explicit permission overwrites for members and roles.
      */
     public ?array $permission_overwrites = null;
 
     /**
-     * the name of the channel (1-100 characters)
+     * the name of the channel (1-100 characters).
      */
     public string $name;
 
     /**
-     * the channel topic (0-1024 characters)
+     * the channel topic (0-1024 characters).
      */
     public ?string $topic = null;
 
     /**
-     * whether the channel is nsfw
+     * whether the channel is nsfw.
      */
     public ?bool $nsfw = null;
 
     /**
-     * the id of the last message sent in this channel (may not point to an existing or valid message)
+     * the id of the last message sent in this channel (may not point to an existing or valid message).
      */
     public ?string $last_message_id;
 
     /**
-     * 	the bitrate (in bits) of the voice channel
+     * 	the bitrate (in bits) of the voice channel.
      */
     public ?int $bitrate = null;
 
     /**
-     * 	the user limit of the voice channel
+     * 	the user limit of the voice channel.
      */
     public ?int $user_limit = null;
 
     /**
-     * 	amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected
+     * 	amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected.
      */
     public ?int $rate_limit_per_user = null;
 
     /**
-     * the recipients of the DM
+     * the recipients of the DM.
      */
     public ?array $recipients = null;
 
     /**
-     * icon hash
+     * icon hash.
      */
     public ?string $icon = null;
 
     /**
-     * id of the creator of the group DM or thread
+     * id of the creator of the group DM or thread.
      */
     public ?string $owner_id = null;
 
     /**
-     * application id of the group DM creator if it is bot-created
+     * application id of the group DM creator if it is bot-created.
      */
     public ?string $application_id = null;
 
     /**
-     * for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
+     * for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created.
      */
     public ?string $parent_id = null;
 
@@ -297,22 +298,22 @@ class DiscordChannel extends DiscordObjectParser
     public ?string $last_pin_timestamp = null;
 
     /**
-     * 	voice region id for the voice channel, automatic when set to null
+     * 	voice region id for the voice channel, automatic when set to null.
      */
     public ?string $rtc_region = null;
 
     /**
-     * the camera video quality mode of the voice channel, 1 when not present
+     * the camera video quality mode of the voice channel, 1 when not present.
      */
     public ?int $video_quality_mode = null;
 
     /**
-     * 	an approximate count of messages in a thread, stops counting at 50
+     * 	an approximate count of messages in a thread, stops counting at 50.
      */
     public ?int $message_count = null;
 
     /**
-     * 	an approximate count of users in a thread, stops counting at 50
+     * 	an approximate count of users in a thread, stops counting at 50.
      */
     public ?int $member_count = null;
 
@@ -327,13 +328,12 @@ class DiscordChannel extends DiscordObjectParser
     public $member = null;
 
     /**
-     * default duration for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+     * default duration for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080.
      */
     public ?int $default_auto_archive_duration = null;
 
     /**
-     * computed permissions for the invoking user in the channel, including overwrites, only included when part of the resolved data received on a slash command interaction
+     * computed permissions for the invoking user in the channel, including overwrites, only included when part of the resolved data received on a slash command interaction.
      */
     public ?string $permissions = null;
 }
-?>
