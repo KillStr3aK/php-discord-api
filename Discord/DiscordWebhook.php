@@ -14,7 +14,12 @@ class DiscordWebhook
     private ?bool $tts = null;
     private ?array $embeds = [];
 
-    public function __construct(public string $url) { }
+    public string $url;
+
+    public function __construct(string $url)
+    {
+        $this->url = $url;
+    }
 
     public function WithUsername(string $username) : self
     {

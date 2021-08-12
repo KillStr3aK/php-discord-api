@@ -74,9 +74,15 @@ class DiscordRequest
     private array $headers = [];
     private array $postfields = [];
     private string $jsonBody = "";
+
+    public string $route;
+    public string $method;
     
-    public function __construct(public string $route, public string $method, string $content_type = "application/json")
+    public function __construct(string $route, string $method, string $content_type = "application/json")
     {
+        $this->route = $route;
+        $this->method = $method;
+
         $this->SetHeader("Content-Type: $content_type");
     }
 

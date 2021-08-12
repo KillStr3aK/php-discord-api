@@ -21,7 +21,12 @@ use Nexd\Discord\Exceptions\DiscordInvalidResponseException;
 
 class DiscordBot
 {
-    public function __construct(public ?string $token) { }
+    public string $token;
+
+    public function __construct(string $token)
+    {
+        $this->token = $token;
+    }
 
     /**
      * Returns the guild object for the given id.

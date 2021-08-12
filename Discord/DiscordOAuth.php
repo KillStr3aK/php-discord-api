@@ -9,8 +9,16 @@ class DiscordOAuth
     private string $access_token;
     private static string $state;
 
-    public function __construct(public string $client, public string $secret, public string $redirect)
+    public string $client;
+    public string $secret;
+    public string $redirect;
+
+    public function __construct(string $client, string $secret, string $redirect)
     {
+        $this->client = $client;
+        $this->secret = $secret;
+        $this->redirect = $redirect;
+
         $request = new DiscordRequest("oauth2/token", DiscordRequest::HTTPRequestMethod_POST, "application/x-www-form-urlencoded");
         $request->SetPostFields(array(
             "client_id" => $this->client,
