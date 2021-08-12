@@ -21,7 +21,7 @@ class DiscordWebhook
         $this->url = $url;
     }
 
-    public function WithContent(string $content) : self
+    public function WithContent(string $content): self
     {
         $this->content = $content;
 
@@ -64,11 +64,11 @@ class DiscordWebhook
     {
         $request = new DiscordRequest('webhooks/'.$this->url, DiscordRequest::HTTPRequestMethod_POST);
         $request->SetJsonBody([
-            "content" => $this->content,
-            "username" => $this->username,
-            "avatar_url" => $this->avatar_url,
-            "tts" => $this->tts,
-            "embeds" => $this->embeds
+            'content'    => $this->content,
+            'username'   => $this->username,
+            'avatar_url' => $this->avatar_url,
+            'tts'        => $this->tts,
+            'embeds'     => $this->embeds,
         ]);
 
         $request->Send();
