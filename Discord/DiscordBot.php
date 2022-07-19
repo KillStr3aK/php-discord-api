@@ -297,7 +297,7 @@ class DiscordBot
     {
         $result = $this->SendRequest('users/@me/guilds', DiscordRequest::HTTPRequestMethod_GET);
         foreach ($result as $index => $value) {
-            $result[$index] = new DiscordChannel($value);
+            $result[$index] = new DiscordGuild($value);
         }
 
         return $result;
