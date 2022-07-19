@@ -19,9 +19,9 @@ class DiscordBot
      *
      * @return DiscordGuild object on success.
      */
-    public function GetGuild(string $id): DiscordGuild
+    public function GetGuild(string $id, bool $with_counts = false): DiscordGuild
     {
-        return new DiscordGuild($this->SendRequest("guilds/$id", DiscordRequest::HTTPRequestMethod_GET));
+        return new DiscordGuild($this->SendRequest("guilds/$id?" . http_build_query(array('with_counts', $with_counts)) . "", DiscordRequest::HTTPRequestMethod_GET));
     }
 
     /**
