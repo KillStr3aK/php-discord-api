@@ -6,7 +6,7 @@ class DiscordGuildPreview extends DiscordObjectParser
 {
     private const InitializeProperties =
     [/*Property Name */			/* to */
-        'emojis'                => 'DiscordEmoji',
+        'emojis'                => 'DiscordEmoji[]',
     ];
 
     public function __construct(array $properties = [])
