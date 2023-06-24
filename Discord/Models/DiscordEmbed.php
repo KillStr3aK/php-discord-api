@@ -2,6 +2,7 @@
 
 namespace Nexd\Discord;
 
+use DateTime;
 use Nexd\Discord\Exceptions\DiscordEmbedFieldLimitException;
 
 require_once __DIR__.'/DiscordEmbedAuthor.php';
@@ -246,6 +247,11 @@ class DiscordEmbed extends DiscordObjectParser implements \IteratorAggregate, \J
             if (isset($this->{$property})) {
                 $data[$property] = $value;
             }
+        }
+
+        if (isset($data["timestamp"]))
+        {
+            $data["timestamp"] = $data["timestamp"]->format(DateTime::ATOM);
         }
 
         return $data;
