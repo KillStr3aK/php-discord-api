@@ -23,4 +23,9 @@ class DiscordEmbedAuthor extends DiscordObjectParser
      * a proxied url of author icon.
      */
     public ?string $proxy_icon_url;
+
+    public function __construct(array $properties = [])
+    {
+        parent::__construct($properties);
+    }
 }

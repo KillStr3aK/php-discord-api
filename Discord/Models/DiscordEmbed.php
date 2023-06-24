@@ -22,8 +22,7 @@ class DiscordEmbedBuilder
     private ?DiscordEmbedVideo $video;
     private ?DiscordEmbedThumbnail $thumbnail;
     private ?DiscordEmbedProvider $provider;
-    private array $fields = [];
-
+    private ?array $fields = null;
     private ?string $title;
     private ?\DateTimeInterface $timestamp;
     private ?string $type = 'rich';
@@ -61,14 +60,14 @@ class DiscordEmbedBuilder
 
     public function WithThumbnail(?string $url = null, int $height, int $width): self
     {
-        $this->image = new DiscordEmbedThumbnail(['url' => $url, 'height' => $height, 'width' => $width]);
+        $this->thumbnail = new DiscordEmbedThumbnail(['url' => $url, 'height' => $height, 'width' => $width]);
 
         return $this;
     }
 
     public function WithVideo(?string $url = null, int $height, int $width): self
     {
-        $this->image = new DiscordEmbedVideo(['url' => $url, 'height' => $height, 'width' => $width]);
+        $this->video = new DiscordEmbedVideo(['url' => $url, 'height' => $height, 'width' => $width]);
 
         return $this;
     }
@@ -80,10 +79,15 @@ class DiscordEmbedBuilder
         return $this;
     }
 
-    public function AddField(?string $name, ?string $field, bool $inline = false): self
+    public function AddField(string $name, string $field, ?bool $inline = false): self
     {
+        if ($this->fields == null)
+        {
+            $this->fields = [];
+        }
+
         if (count($this->fields) < self::MAX_EMBED_FIELDS) {
-            array_push($this->fields, new DiscordEmbedField(['name' => $name, 'field' => $field, 'inline' => $inline]));
+            array_push($this->fields, new DiscordEmbedField(['name' => $name, 'value' => $field, 'inline' => $inline]));
 
             return $this;
         }
@@ -146,11 +150,11 @@ class DiscordEmbedBuilder
     }
 }
 
-class DiscordEmbed extends DiscordObjectParser implements \IteratorAggregate
+class DiscordEmbed extends DiscordObjectParser implements \IteratorAggregate, \JsonSerializable
 {
     private const InitializeProperties =
     [/*Property Name */			/* to */
-        'author'	           => 'DiscordEmbedAuthor',
+        'author'	        => 'DiscordEmbedAuthor',
         'footer'            => 'DiscordEmbedFooter',
         'image'             => 'DiscordEmbedImage',
         'video'             => 'DiscordEmbedVideo',
@@ -234,4 +238,16 @@ class DiscordEmbed extends DiscordObjectParser implements \IteratorAggregate
      * fields information.
      */
     public ?array $fields;
+
+    public function jsonSerialize()
+    {
+        $data = [];
+        foreach ($this as $property => $value) {
+            if (isset($this->{$property})) {
+                $data[$property] = $value;
+            }
+        }
+
+        return $data;
+    }
 }

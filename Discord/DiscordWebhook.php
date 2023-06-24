@@ -4,7 +4,7 @@ namespace Nexd\Discord;
 
 use Nexd\Discord\Exceptions\DiscordEmbedLimitException;
 
-class DiscordWebhook
+class DiscordWebhook implements \JsonSerializable
 {
     private const MAX_EMBEDS = 10;
 
@@ -12,13 +12,17 @@ class DiscordWebhook
     private ?string $avatar_url;
     private ?string $content;
     private ?bool $tts;
-    private ?array $embeds = [];
+    private ?array $embeds;
 
     public string $url;
 
     public function __construct(string $url)
     {
         $this->url = $url;
+        $this->content = null;
+        $this->avatar_url = null;
+        $this->tts = null;
+        $this->embeds = null;
     }
 
     public function WithContent(string $content): self
@@ -51,6 +55,11 @@ class DiscordWebhook
 
     public function AddEmbed(DiscordEmbed $embed): self
     {
+        if ($this->embeds == null)
+        {
+            $this->embeds = [];
+        }
+
         if (count($this->embeds) < self::MAX_EMBEDS) {
             array_push($this->embeds, $embed);
 
@@ -72,5 +81,17 @@ class DiscordWebhook
         ]);
 
         $request->Send();
+    }
+
+    public function jsonSerialize()
+    {
+        $data = [];
+        foreach ($this as $property => $value) {
+            if (isset($this->{$property})) {
+                $data[$property] = $value;
+            }
+        }
+
+        return $data;
     }
 }
