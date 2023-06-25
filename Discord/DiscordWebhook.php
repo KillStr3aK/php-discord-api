@@ -80,7 +80,7 @@ class DiscordWebhook implements \JsonSerializable
             'embeds'     => $this->embeds,
         ]);
 
-        $request->Send();
+        return $request->Send();
     }
 
     public function jsonSerialize()
