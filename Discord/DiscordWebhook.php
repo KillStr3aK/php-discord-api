@@ -69,7 +69,7 @@ class DiscordWebhook implements \JsonSerializable
         throw new DiscordEmbedLimitException('DiscordWebhook cannot have more than '.self::MAX_EMBEDS.' embeds.');
     }
 
-    public function Send(): void
+    public function Send(): mixed
     {
         $request = new DiscordRequest('webhooks/'.$this->url, DiscordRequest::HTTPRequestMethod_POST);
         $request->SetJsonBody([
